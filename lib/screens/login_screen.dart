@@ -1,3 +1,4 @@
+import 'package:flash_chat/screens/prioritizer_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flash_chat/components/rounded_button.dart';
 import 'package:flash_chat/constants.dart';
@@ -34,7 +35,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   tag: 'logo',
                   child: Container(
                     height: 200.0,
-                    child: Image.asset('images/logo.png'),
+                    child: Image.asset('images/playstore.png'),
                   ),
                 ),
               ),
@@ -45,7 +46,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 keyboardType: TextInputType.emailAddress,
                 textAlign: TextAlign.center,
                 onChanged: (value) {
-                  email = value;
+                  email = value.trim();
                 },
                 decoration:
                     kTextFieldDecoration.copyWith(hintText: 'Enter your email'),
@@ -76,7 +77,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     final user = await _auth.signInWithEmailAndPassword(
                         email: email, password: password);
                     if (user != null) {
-                      Navigator.pushNamed(context, ChatScreen.id);
+                      Navigator.pushNamed(context, StoryPage.id);
                     }
 
                     setState(() {

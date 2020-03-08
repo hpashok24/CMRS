@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'login_screen.dart';
 import 'registration_screen.dart';
@@ -47,16 +48,17 @@ class _WelcomeScreenState extends State<WelcomeScreen>
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
             Row(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 Hero(
                   tag: 'logo',
                   child: Container(
-                    child: Image.asset('images/logo.png'),
+                    child: Image.asset('images/playstore.png'),
                     height: 60.0,
                   ),
                 ),
                 TypewriterAnimatedTextKit(
-                  text: ['Flash Chat'],
+                  text: ['C M R S'],
                   textStyle: TextStyle(
                     fontSize: 45.0,
                     fontWeight: FontWeight.w900,
