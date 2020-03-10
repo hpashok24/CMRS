@@ -3,20 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flash_chat/constants.dart';
 import 'package:geolocator/geolocator.dart';
-
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 
 
 import 'package:flash_chat/components/bottom_button.dart';
 import 'package:flash_chat/components/round_icon_button.dart';
-
-
-enum Gender {
-  male,
-  female,
-}
-
-String patient;
 
 
 class InputPage extends StatefulWidget {
@@ -26,15 +18,18 @@ class InputPage extends StatefulWidget {
 }
 
 class _InputPageState extends State<InputPage> {
-  Gender selectedGender;
+  String gender;
 
   int age = 20;
-
+  String patient;
+  Position position;
+  GeoPoint myLocation;
+  //final firebaseAdmin = require('firebase-admin');
   void getLocation() async {
-    Position position = await Geolocator().getLastKnownPosition(desiredAccuracy: LocationAccuracy.high);
+    position = await Geolocator().getLastKnownPosition(desiredAccuracy: LocationAccuracy.high);
+    myLocation = GeoPoint(position.latitude,position.longitude);
     print(position);
   }
-
 
   TextEditingController _controller;
 
@@ -48,6 +43,7 @@ class _InputPageState extends State<InputPage> {
     super.dispose();
   }
 
+  final _firestore = Firestore.instance;
 
   @override
   Widget build(BuildContext context) {
@@ -68,10 +64,10 @@ class _InputPageState extends State<InputPage> {
                       child: ReusableCard(
                         onPress: () {
                           setState(() {
-                            selectedGender = Gender.male;
+                            gender = 'male';
                           });
                         },
-                        colour: selectedGender == Gender.male
+                        colour: gender == 'male'
                             ? kActiveCardColour
                             : kInactiveCardColour,
                         cardChild: IconContent(
@@ -84,10 +80,10 @@ class _InputPageState extends State<InputPage> {
                       child: ReusableCard(
                         onPress: () {
                           setState(() {
-                            selectedGender = Gender.female;
+                            gender = 'female';
                           });
                         },
-                        colour: selectedGender == Gender.female
+                        colour: gender == 'female'
                             ? kActiveCardColour
                             : kInactiveCardColour,
                         cardChild: IconContent(
@@ -207,23 +203,14 @@ getLocation();
             BottomButton(
               buttonTitle: 'Request CMRS',
               onTap: () {
-
-                if(selectedGender != null)
-
+                //if(gender != null)
+                _firestore.collection('user_details').add({
+                  'age': age,
+                  'gender': gender,
+                  'name': patient,
+                  'location': myLocation
+                });
                 Navigator.pushNamed(context, StoryPage.id);
-                /*CalculatorBrain calc =
-                CalculatorBrain(height: height, weight: weight);
-
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => ResultsPage(
-                      bmiResult: calc.calculateBMI(),
-                      resultText: calc.getResult(),
-                      interpretation: calc.getInterpretation(),
-                    ),
-                  ),
-                );*/
               },
             ),
           ],

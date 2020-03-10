@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flash_chat/story_brain.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
-
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 //TODO: Step 9 - Create a new storyBrain object from the StoryBrain class.
 StoryBrain storyBrain = StoryBrain();
