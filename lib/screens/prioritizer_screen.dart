@@ -1,8 +1,8 @@
-
+import 'package:flash_chat/screens/inputpage.dart';
 import 'package:flutter/material.dart';
 import 'package:flash_chat/story_brain.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+
 
 //TODO: Step 9 - Create a new storyBrain object from the StoryBrain class.
 StoryBrain storyBrain = StoryBrain();
@@ -43,7 +43,8 @@ class _StoryPageState extends State<StoryPage> {
                     //TODO: Step 10 - use the storyBrain to get the first story title and display it in this Text Widget.
                     storyBrain.getStory(),
                     style: TextStyle(
-                      fontSize: 25.0,
+                        fontSize: 25.0,
+                        fontWeight: FontWeight.bold
                     ),
                   ),
                 ),
@@ -57,19 +58,99 @@ class _StoryPageState extends State<StoryPage> {
                     //TODO: Step 24 - Run the app and try to figure out what code you need to add to this file to make the story change when you press on the choice buttons.
                     if(giveAlert())
                     {
+                      if(storyBrain.storynumber==9){
+                        Alert(
+                          context: context,
+                          type: AlertType.error,
+                          title: "Patient in Immediate danger",
+                          desc: "Click the button to get the nearest hospital with ICU bed",
+                          buttons: [
+                            DialogButton(
+                              child: Text(
+                                "Click here!",
+
+                                style: TextStyle(color: Colors.white, fontSize: 20),
+                              ),
+                              width: 120,
+                              onPressed: () {
+                                storyBrain.restart();
+                                Navigator.pop(context);
+                              },
+
+                            )
+                          ],
+                        ).show();
+                      }
+
+                      if(storyBrain.storynumber==10||storyBrain.storynumber==7){
+                        Alert(
+                          context: context,
+                          type: AlertType.error,
+                          title: "Patient is not critical call a regular ambulance",
+                          desc: "Call 108",
+                          buttons: [
+                            DialogButton(
+                              child: Text(
+                                "Call",
+
+                                style: TextStyle(color: Colors.white, fontSize: 20),
+                              ),
+                              width: 120,
+                              onPressed: () {
+                                storyBrain.restart();
+                                Navigator.pop(context);
+                              },
+
+                            )
+                          ],
+                        ).show();
+                      }
+
+                      if(storyBrain.storynumber==10){
+                        Alert(
+                          context: context,
+                          type: AlertType.error,
+                          title: "Patient is not critical call go to nearest hospital",
+                          desc: "Call 108",
+                          buttons: [
+                            DialogButton(
+                              child: Text(
+                                "Call",
+
+                                style: TextStyle(color: Colors.white, fontSize: 20),
+                              ),
+                              width: 120,
+                              onPressed: () {
+                                storyBrain.restart();
+                                Navigator.pop(context);
+                              },
+
+                            )
+                          ],
+                        ).show();
+                      }
+
+                    }
+
+                    if(storyBrain.storynumber==8){
                       Alert(
                         context: context,
                         type: AlertType.error,
-                        title: "Patient in Immediate danger",
-                        desc: "Click the button to get the nearest hospital with ICU bed",
+                        title: "Call mortuary van service",
+                        desc: "Call ",
                         buttons: [
                           DialogButton(
                             child: Text(
-                              "Click here!",
+                              "Call",
+
                               style: TextStyle(color: Colors.white, fontSize: 20),
                             ),
-                            onPressed: () => Navigator.pop(context),
                             width: 120,
+                            onPressed: () {
+                              storyBrain.restart();
+                              Navigator.pop(context);
+                            },
+
                           )
                         ],
                       ).show();
@@ -85,7 +166,8 @@ class _StoryPageState extends State<StoryPage> {
                     //TODO: Step 13 - Use the storyBrain to get the text for choice 1.
                     storyBrain.getChoice1(),
                     style: TextStyle(
-                      fontSize: 20.0,
+                        fontSize: 20.0,
+                        fontWeight: FontWeight.bold
                     ),
                   ),
                 ),
@@ -113,6 +195,7 @@ class _StoryPageState extends State<StoryPage> {
                       storyBrain.getChoice2(),
                       style: TextStyle(
                         fontSize: 20.0,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
                   ),
