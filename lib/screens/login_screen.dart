@@ -1,9 +1,12 @@
-import 'package:flash_chat/screens/prioritizer_screen.dart';
+import 'package:flash_chat/screens/inputpage.dart';
+import 'package:flash_chat/screens/welcome_screen.dart';
+import 'package:edge_alert/edge_alert.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flash_chat/components/rounded_button.dart';
 import 'package:flash_chat/constants.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'chat_screen.dart';
+
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -77,14 +80,15 @@ class _LoginScreenState extends State<LoginScreen> {
                     final user = await _auth.signInWithEmailAndPassword(
                         email: email, password: password);
                     if (user != null) {
-                      Navigator.pushNamed(context, StoryPage.id);
+                      Navigator.pushNamed(context, InputPage.id);
                     }
 
                     setState(() {
                       showSpinner = false;
                     });
                   } catch (e) {
-                    print(e);
+                    EdgeAlert.show(context, title: 'Invalid Credentials', description: 'Invalid user name or password', gravity: EdgeAlert.BOTTOM);
+                    Navigator.pushNamed(context, WelcomeScreen.id);
                   }
                 },
               ),

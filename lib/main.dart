@@ -1,9 +1,10 @@
+import 'package:flash_chat/screens/inputpage.dart';
 import 'package:flash_chat/screens/prioritizer_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flash_chat/screens/welcome_screen.dart';
 import 'package:flash_chat/screens/login_screen.dart';
 import 'package:flash_chat/screens/registration_screen.dart';
-import 'package:flash_chat/screens/chat_screen.dart';
+
 import 'story.dart';
 import 'story_brain.dart';
 
@@ -19,6 +20,7 @@ class FlashChat extends StatelessWidget {
         LoginScreen.id: (context) => LoginScreen(),
         RegistrationScreen.id: (context) => RegistrationScreen(),
         StoryPage.id: (context) => StoryPage(),
+        InputPage.id: (context)=> InputPage(),
       },
     );
   }
