@@ -4,8 +4,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flash_chat/constants.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-
-
+import 'package:flutter/services.dart';
+import 'package:edge_alert/edge_alert.dart';
 
 import 'package:flash_chat/components/bottom_button.dart';
 import 'package:flash_chat/components/round_icon_button.dart';
@@ -26,9 +26,23 @@ class _InputPageState extends State<InputPage> {
   GeoPoint myLocation;
   //final firebaseAdmin = require('firebase-admin');
   void getLocation() async {
-    position = await Geolocator().getLastKnownPosition(desiredAccuracy: LocationAccuracy.high);
-    myLocation = GeoPoint(position.latitude,position.longitude);
-    print(position);
+    try {
+      position = await Geolocator().getLastKnownPosition(desiredAccuracy: LocationAccuracy.high);
+      myLocation = GeoPoint(position.latitude,position.longitude);
+
+    }
+    on PlatformException catch(e){
+      if(e.code == 'PERMISSION_DISABLED'){
+        //error = 'Permission denied';
+        EdgeAlert.show(context, title: 'Your location', description: 'Please Switch on your location in phone', gravity: EdgeAlert.BOTTOM);
+      }
+      else{
+        print(position);
+        EdgeAlert.show(context, title: 'Your location', description: '$position', gravity: EdgeAlert.BOTTOM);
+      }
+
+    }
+
   }
 
   TextEditingController _controller;
@@ -123,10 +137,10 @@ class _InputPageState extends State<InputPage> {
                       crossAxisAlignment: CrossAxisAlignment.baseline,
                       textBaseline: TextBaseline.alphabetic,
                       children: <Widget>[
-                       Container(
+                        Container(
 
 
-                       ),
+                        ),
 
                       ],
                     ),
@@ -145,7 +159,7 @@ class _InputPageState extends State<InputPage> {
 
                     child: ReusableCard(
                       onPress: () {
-getLocation();
+                        getLocation();
                       },
                       colour: kActiveCardColour,
                       cardChild: IconContent(

@@ -1,4 +1,4 @@
-import 'package:flash_chat/screens/inputpage.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flash_chat/story_brain.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
@@ -26,7 +26,7 @@ class _StoryPageState extends State<StoryPage> {
       body: Container(
         decoration: BoxDecoration(
           image: DecorationImage(
-            image: AssetImage('images/nknk.png'),
+            image: AssetImage('images/whitebackgroung.png'),
             fit: BoxFit.cover,
           ),
         ),
@@ -106,11 +106,11 @@ class _StoryPageState extends State<StoryPage> {
                         ).show();
                       }
 
-                      if(storyBrain.storynumber==10){
+                      if(storyBrain.storynumber==8){
                         Alert(
                           context: context,
                           type: AlertType.error,
-                          title: "Patient is not critical call go to nearest hospital",
+                          title: "Mortuary Van",
                           desc: "Call 108",
                           buttons: [
                             DialogButton(
