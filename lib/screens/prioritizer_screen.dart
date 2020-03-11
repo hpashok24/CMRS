@@ -1,8 +1,8 @@
-
+import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/material.dart';
 import 'package:flash_chat/story_brain.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
-
+import 'package:edge_alert/edge_alert.dart';
 
 //TODO: Step 9 - Create a new storyBrain object from the StoryBrain class.
 StoryBrain storyBrain = StoryBrain();
@@ -15,6 +15,19 @@ class StoryPage extends StatefulWidget {
 }
 
 class _StoryPageState extends State<StoryPage> {
+
+  int number=108;
+  int mnumber= 09844088147;
+
+  void _launchCaller(int number) async{
+    var url = "tel:${number.toString()}";
+    if(await canLaunch(url)){
+      await launch(url);
+    }
+    else{
+      throw 'Could not place call';
+    }
+  }
 
   bool giveAlert(){
     return storyBrain.alert();
@@ -63,7 +76,7 @@ class _StoryPageState extends State<StoryPage> {
                           context: context,
                           type: AlertType.error,
                           title: "Patient in Immediate danger",
-                          desc: "Click the button to get the nearest hospital with ICU bed",
+                          desc: "Get CMRS the nearest hospital with ICU bed",
                           buttons: [
                             DialogButton(
                               child: Text(
@@ -82,7 +95,7 @@ class _StoryPageState extends State<StoryPage> {
                         ).show();
                       }
 
-                      if(storyBrain.storynumber==10||storyBrain.storynumber==7){
+                      if(storyBrain.storynumber==10){
                         Alert(
                           context: context,
                           type: AlertType.error,
@@ -97,9 +110,11 @@ class _StoryPageState extends State<StoryPage> {
                               ),
                               width: 120,
                               onPressed: () {
+                                _launchCaller(number);
                                 storyBrain.restart();
                                 Navigator.pop(context);
                               },
+
 
                             )
                           ],
@@ -111,7 +126,7 @@ class _StoryPageState extends State<StoryPage> {
                           context: context,
                           type: AlertType.error,
                           title: "Mortuary Van",
-                          desc: "Call 108",
+                          desc: "Call St Peters Undertaker service",
                           buttons: [
                             DialogButton(
                               child: Text(
@@ -121,6 +136,7 @@ class _StoryPageState extends State<StoryPage> {
                               ),
                               width: 120,
                               onPressed: () {
+                                _launchCaller(mnumber);
                                 storyBrain.restart();
                                 Navigator.pop(context);
                               },
@@ -132,11 +148,11 @@ class _StoryPageState extends State<StoryPage> {
 
                     }
 
-                    if(storyBrain.storynumber==8){
+                    if(storyBrain.storynumber==7){
                       Alert(
                         context: context,
                         type: AlertType.error,
-                        title: "Call mortuary van service",
+                        title: "Patient is not critical call a regular ambulance",
                         desc: "Call ",
                         buttons: [
                           DialogButton(
@@ -147,6 +163,7 @@ class _StoryPageState extends State<StoryPage> {
                             ),
                             width: 120,
                             onPressed: () {
+                              _launchCaller(number);
                               storyBrain.restart();
                               Navigator.pop(context);
                             },

@@ -29,12 +29,14 @@ class _InputPageState extends State<InputPage> {
     try {
       position = await Geolocator().getLastKnownPosition(desiredAccuracy: LocationAccuracy.high);
       myLocation = GeoPoint(position.latitude,position.longitude);
-
+      print(position);
+      EdgeAlert.show(context, title: 'Your location', description: '$position', gravity: EdgeAlert.BOTTOM);
     }
     on PlatformException catch(e){
       if(e.code == 'PERMISSION_DISABLED'){
         //error = 'Permission denied';
         EdgeAlert.show(context, title: 'Your location', description: 'Please Switch on your location in phone', gravity: EdgeAlert.BOTTOM);
+
       }
       else{
         print(position);

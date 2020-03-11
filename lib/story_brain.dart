@@ -15,12 +15,14 @@ class StoryBrain {
     //0
     Story(
         storyTitle:
-        'Is the patient Walking ?',
+        'Is the patient Walking ?'
+            ,
         choice1: 'Walks ',
         choice2: 'Doesn\'t walk' ),
     //1
     Story(
-        storyTitle: 'Patient\'s respiration ?',
+        storyTitle: 'Patient\'s respiration ?'
+            ,
         choice1: 'Present ',
         choice2: 'Absent'),
     //2
@@ -61,8 +63,8 @@ class StoryBrain {
     //8
     Story(
         storyTitle:
-        'You are dead',
-        choice1: '',
+        'Patient is dead',
+        choice1: 'Get mortuary service',
         choice2: ''),
     //9
     Story(
@@ -148,6 +150,9 @@ class StoryBrain {
       return true;
     }
     if(storynumber ==10){
+      return true;
+    }
+    if(storynumber == 8){
       return true;
     }
     else{
