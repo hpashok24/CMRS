@@ -1,23 +1,25 @@
+import 'package:flash_chat/screens/hospital_details.dart';
 import 'package:flash_chat/screens/inputpage.dart';
-import 'package:flash_chat/screens/welcome_screen.dart';
-import 'package:edge_alert/edge_alert.dart';
-
+import 'package:flash_chat/screens/registration_main.dart';
+import 'package:flash_chat/screens/user_options.dart';
 import 'package:flutter/material.dart';
 import 'package:flash_chat/components/rounded_button.dart';
 import 'package:flash_chat/constants.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:edge_alert/edge_alert.dart';
 
 import 'package:modal_progress_hud/modal_progress_hud.dart';
+import 'package:flash_chat/screens/welcome_screen.dart';
 
-class LoginScreen1 extends StatefulWidget {
-  static const String id = 'login_screen';
+class RegistrationScreen3 extends StatefulWidget {
+  static const String id = 'registration_screen';
   @override
-  _LoginScreenState1 createState() => _LoginScreenState1();
+  _RegistrationScreen3State createState() => _RegistrationScreen3State();
 }
 
-class _LoginScreenState1 extends State<LoginScreen1> {
-  bool showSpinner = false;
+class _RegistrationScreen3State extends State<RegistrationScreen3> {
   final _auth = FirebaseAuth.instance;
+  bool showSpinner = false;
   String email;
   String password;
 
@@ -52,7 +54,7 @@ class _LoginScreenState1 extends State<LoginScreen1> {
                   email = value.trim();
                 },
                 decoration:
-                    kTextFieldDecoration.copyWith(hintText: 'Enter your email'),
+                kTextFieldDecoration.copyWith(hintText: 'Enter your email'),
               ),
               SizedBox(
                 height: 8.0,
@@ -70,25 +72,27 @@ class _LoginScreenState1 extends State<LoginScreen1> {
                 height: 24.0,
               ),
               RoundedButton(
-                title: 'Log In',
-                colour: Colors.lightBlueAccent,
+                title: 'Register',
+                colour: Colors.blueAccent,
                 onPressed: () async {
                   setState(() {
                     showSpinner = true;
                   });
                   try {
-                    final user = await _auth.signInWithEmailAndPassword(
+                    final newUser = await _auth.createUserWithEmailAndPassword(
                         email: email, password: password);
-                    if (user != null) {
-                      Navigator.pushNamed(context, InputPage.id);
+                    if (newUser != null) {
+                      //:Todo form
+
+                      Navigator.pushNamed(context, HospitalDetails.id);
                     }
 
                     setState(() {
                       showSpinner = false;
                     });
                   } catch (e) {
-                    EdgeAlert.show(context, title: 'Invalid Credentials', description: 'Invalid user name or password', gravity: EdgeAlert.BOTTOM);
-                    Navigator.pushNamed(context, WelcomeScreen.id);
+                    EdgeAlert.show(context, title: 'Invalid Username', description: 'Username Already Exists', gravity: EdgeAlert.BOTTOM);
+                    Navigator.pushNamed(context,  MainRegistration.id);
                   }
                 },
               ),

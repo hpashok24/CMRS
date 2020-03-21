@@ -1,12 +1,17 @@
 import 'package:flash_chat/screens/inputpage.dart';
+import 'package:flash_chat/screens/login_main.dart';
 import 'package:flash_chat/screens/prioritizer_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flash_chat/screens/welcome_screen.dart';
 import 'package:flash_chat/screens/login_screen.dart';
 import 'package:flash_chat/screens/registration_screen.dart';
 import 'package:flutter/services.dart';
-
-
+import 'package:flash_chat/screens/registration_main.dart';
+import 'package:flash_chat/screens/login_screen_hospital.dart';
+import 'package:flash_chat/screens/user_options.dart';
+import 'package:flash_chat/screens/hospital_details.dart';
+import 'package:flash_chat/screens/registration_hospital.dart';
+import 'package:flash_chat/screens/dashboard.dart';
 void main() => runApp(FlashChat());
 
 class FlashChat extends StatelessWidget {
@@ -18,13 +23,22 @@ class FlashChat extends StatelessWidget {
         DeviceOrientation.portraitDown,
       ]);
     return MaterialApp(
-      initialRoute: WelcomeScreen.id,
+      initialRoute: Hospital_Dashboard.id,
       routes: {
-        WelcomeScreen.id: (context) => WelcomeScreen(),
-        LoginScreen.id: (context) => LoginScreen(),
-        RegistrationScreen.id: (context) => RegistrationScreen(),
-        StoryPage.id: (context) => StoryPage(),
-        InputPage.id: (context)=> InputPage(),
+
+        LoginScreen2.id: (context) =>             LoginScreen2(),
+        LoginScreen1.id: (context) =>             LoginScreen1(),
+        WelcomeScreen.id: (context) =>          WelcomeScreen(),
+        LoginScreen1.id: (context) =>             LoginScreen1(),
+        RegistrationScreen1.id: (context) =>      RegistrationScreen1(),
+        StoryPage.id: (context) =>               StoryPage(),
+        InputPage.id: (context)=>                InputPage(),
+        MainLogin.id: (context)=>                MainLogin(),
+        MainRegistration.id: (context)=>                MainRegistration(),
+        UserOptions.id: (context)=>                UserOptions(),
+        HospitalDetails.id: (context)=>                HospitalDetails(),
+        RegistrationScreen3.id: (context) =>      RegistrationScreen3(),
+        Hospital_Dashboard.id: (context) =>             Hospital_Dashboard(),
       },
     );
   }

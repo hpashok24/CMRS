@@ -1,4 +1,6 @@
 import 'package:flash_chat/screens/inputpage.dart';
+import 'package:flash_chat/screens/registration_main.dart';
+import 'package:flash_chat/screens/user_options.dart';
 import 'package:flutter/material.dart';
 import 'package:flash_chat/components/rounded_button.dart';
 import 'package:flash_chat/constants.dart';
@@ -8,13 +10,13 @@ import 'package:edge_alert/edge_alert.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:flash_chat/screens/welcome_screen.dart';
 
-class RegistrationScreen extends StatefulWidget {
+class RegistrationScreen1 extends StatefulWidget {
   static const String id = 'registration_screen';
   @override
-  _RegistrationScreenState createState() => _RegistrationScreenState();
+  _RegistrationScreen1State createState() => _RegistrationScreen1State();
 }
 
-class _RegistrationScreenState extends State<RegistrationScreen> {
+class _RegistrationScreen1State extends State<RegistrationScreen1> {
   final _auth = FirebaseAuth.instance;
   bool showSpinner = false;
   String email;
@@ -79,7 +81,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     final newUser = await _auth.createUserWithEmailAndPassword(
                         email: email, password: password);
                     if (newUser != null) {
-                      Navigator.pushNamed(context, InputPage.id);
+                      Navigator.pushNamed(context, UserOptions.id);
                     }
 
                     setState(() {
@@ -87,7 +89,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     });
                   } catch (e) {
                     EdgeAlert.show(context, title: 'Invalid Username', description: 'Username Already Exists', gravity: EdgeAlert.BOTTOM);
-                    Navigator.pushNamed(context,  WelcomeScreen.id);
+                    Navigator.pushNamed(context,  MainRegistration.id);
                   }
                 },
               ),

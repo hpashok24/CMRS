@@ -1,4 +1,6 @@
+import 'package:flash_chat/screens/hospital_details.dart';
 import 'package:flash_chat/screens/inputpage.dart';
+import 'package:flash_chat/screens/login_main.dart';
 import 'package:flash_chat/screens/welcome_screen.dart';
 import 'package:edge_alert/edge_alert.dart';
 
@@ -9,13 +11,13 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 
-class LoginScreen1 extends StatefulWidget {
-  static const String id = 'login_screen';
+class LoginScreen2 extends StatefulWidget {
+  static const String id = 'login_screen_hospital';
   @override
-  _LoginScreenState1 createState() => _LoginScreenState1();
+  _LoginScreenState2 createState() => _LoginScreenState2();
 }
 
-class _LoginScreenState1 extends State<LoginScreen1> {
+class _LoginScreenState2 extends State<LoginScreen2> {
   bool showSpinner = false;
   final _auth = FirebaseAuth.instance;
   String email;
@@ -52,7 +54,7 @@ class _LoginScreenState1 extends State<LoginScreen1> {
                   email = value.trim();
                 },
                 decoration:
-                    kTextFieldDecoration.copyWith(hintText: 'Enter your email'),
+                kTextFieldDecoration.copyWith(hintText: 'Enter your email'),
               ),
               SizedBox(
                 height: 8.0,
@@ -80,7 +82,9 @@ class _LoginScreenState1 extends State<LoginScreen1> {
                     final user = await _auth.signInWithEmailAndPassword(
                         email: email, password: password);
                     if (user != null) {
-                      Navigator.pushNamed(context, InputPage.id);
+                      //:Todo hospital dash board
+                      Navigator.pushNamed(context, HospitalDetails.id);
+
                     }
 
                     setState(() {
@@ -88,7 +92,7 @@ class _LoginScreenState1 extends State<LoginScreen1> {
                     });
                   } catch (e) {
                     EdgeAlert.show(context, title: 'Invalid Credentials', description: 'Invalid user name or password', gravity: EdgeAlert.BOTTOM);
-                    Navigator.pushNamed(context, WelcomeScreen.id);
+                    Navigator.pushNamed(context, MainLogin.id);
                   }
                 },
               ),

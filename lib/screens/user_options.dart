@@ -1,3 +1,4 @@
+import 'package:flash_chat/screens/inputpage.dart';
 import 'package:flash_chat/screens/login_main.dart';
 import 'package:flash_chat/screens/registration_main.dart';
 import 'package:flutter/cupertino.dart';
@@ -7,14 +8,14 @@ import 'registration_screen.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flash_chat/components/rounded_button.dart';
 
-class WelcomeScreen extends StatefulWidget {
-  static const String id = 'welcome_screen';
+class UserOptions extends StatefulWidget {
+  static const String id = 'user_options_screen';
 
   @override
-  _WelcomeScreenState createState() => _WelcomeScreenState();
+  _UserOptionsState createState() => _UserOptionsState();
 }
 
-class _WelcomeScreenState extends State<WelcomeScreen>
+class _UserOptionsState extends State<UserOptions>
     with SingleTickerProviderStateMixin {
   AnimationController controller;
   Animation animation;
@@ -72,17 +73,18 @@ class _WelcomeScreenState extends State<WelcomeScreen>
               height: 48.0,
             ),
             RoundedButton(
-              title: 'Log In',
+              title: 'Request ambulance or report incident',
               colour: Colors.lightBlueAccent,
               onPressed: () {
-                Navigator.pushNamed(context, MainLogin.id);
+                Navigator.pushNamed(context, InputPage.id);
               },
             ),
             RoundedButton(
-              title: 'Register',
+              title: 'Get nearest hospital (self ambulance)',
               colour: Colors.blueAccent,
               onPressed: () {
-                Navigator.pushNamed(context, MainRegistration.id);
+                //:TODO get nearest hospital run query of all locations compute and get shortest path.
+                //Navigator.pushNamed(context, MainRegistration.id);
               },
             ),
           ],

@@ -11,16 +11,17 @@ import 'package:flash_chat/components/bottom_button.dart';
 import 'package:flash_chat/components/round_icon_button.dart';
 
 
-class InputPage extends StatefulWidget {
-  static const String id = 'inputpage_screen';
+class HospitalDetails extends StatefulWidget {
+  static const String id = 'hdetails_screen';
   @override
-  _InputPageState createState() => _InputPageState();
+  _HospitalDetailsState createState() => _HospitalDetailsState();
 }
 
-class _InputPageState extends State<InputPage> {
+class _HospitalDetailsState extends State<HospitalDetails> {
   String gender;
 
-  int age = 20;
+  int beds = 20;
+  int ambulance =0;
   String patient;
   Position position;
   GeoPoint myLocation;
@@ -76,22 +77,20 @@ class _InputPageState extends State<InputPage> {
             Expanded(
                 child: Row(
                   children: <Widget>[
-                    Expanded(
-                      child: ReusableCard(
-                        onPress: () {
-                          setState(() {
-                            gender = 'male';
-                          });
-                        },
-                        colour: gender == 'male'
-                            ? kActiveCardColour
-                            : kInactiveCardColour,
-                        cardChild: IconContent(
-                          icon: FontAwesomeIcons.mars,
-                          label: 'MALE',
-                        ),
-                      ),
-                    ),
+
+Expanded(
+
+child: ReusableCard(
+onPress: () {
+getLocation();
+},
+colour: kActiveCardColour,
+cardChild: IconContent(
+icon: FontAwesomeIcons.locationArrow,
+label: 'Location',
+),
+),
+),
                     Expanded(
                       child: ReusableCard(
                         onPress: () {
@@ -158,15 +157,45 @@ class _InputPageState extends State<InputPage> {
               child: Row(
                 children: <Widget>[
                   Expanded(
-
                     child: ReusableCard(
-                      onPress: () {
-                        getLocation();
-                      },
                       colour: kActiveCardColour,
-                      cardChild: IconContent(
-                        icon: FontAwesomeIcons.locationArrow,
-                        label: 'Location',
+                      cardChild: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Text(
+                            'Ambulances',
+                            style: kLabelTextStyle,
+                          ),
+                          Text(
+                            ambulance.toString(),
+                            style: kNumberTextStyle,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              RoundIconButton(
+                                icon: FontAwesomeIcons.minus,
+                                onPressed: () {
+                                  setState(
+                                        () {
+                                      ambulance--;
+                                    },
+                                  );
+                                },
+                              ),
+                              SizedBox(
+                                width: 10.0,
+                              ),
+                              RoundIconButton(
+                                  icon: FontAwesomeIcons.plus,
+                                  onPressed: () {
+                                    setState(() {
+                                      ambulance++;
+                                    });
+                                  })
+                            ],
+                          )
+                        ],
                       ),
                     ),
                   ),
@@ -181,7 +210,7 @@ class _InputPageState extends State<InputPage> {
                             style: kLabelTextStyle,
                           ),
                           Text(
-                            age.toString(),
+                            beds.toString(),
                             style: kNumberTextStyle,
                           ),
                           Row(
@@ -192,7 +221,7 @@ class _InputPageState extends State<InputPage> {
                                 onPressed: () {
                                   setState(
                                         () {
-                                      age--;
+                                      beds--;
                                     },
                                   );
                                 },
@@ -204,7 +233,7 @@ class _InputPageState extends State<InputPage> {
                                   icon: FontAwesomeIcons.plus,
                                   onPressed: () {
                                     setState(() {
-                                      age++;
+                                      beds++;
                                     });
                                   })
                             ],
@@ -220,12 +249,12 @@ class _InputPageState extends State<InputPage> {
               buttonTitle: 'Request CMRS',
               onTap: () {
                 //if(gender != null)
-                _firestore.collection('user_details').add({
+                /*_firestore.collection('user_details').add({
                   'age': age,
                   'gender': gender,
                   'name': patient,
                   'location': myLocation
-                });
+                });*/
                 _firestore.collection('user_details');
 
                 var citiesRef = _firestore.collection('user_details');
@@ -292,7 +321,6 @@ class IconContent extends StatelessWidget {
     );
   }
 }
-
 
 
 

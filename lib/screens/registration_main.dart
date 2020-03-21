@@ -1,20 +1,19 @@
-import 'package:flash_chat/screens/login_main.dart';
-import 'package:flash_chat/screens/registration_main.dart';
+import 'package:flash_chat/screens/registration_hospital.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'login_screen.dart';
-import 'registration_screen.dart';
+import 'package:flash_chat/screens/login_screen.dart';
+import 'package:flash_chat/screens/registration_screen.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flash_chat/components/rounded_button.dart';
 
-class WelcomeScreen extends StatefulWidget {
-  static const String id = 'welcome_screen';
+class MainRegistration extends StatefulWidget {
+  static const String id = 'main_registration_screen';
 
   @override
-  _WelcomeScreenState createState() => _WelcomeScreenState();
+  _MainRegistrationState createState() => _MainRegistrationState();
 }
 
-class _WelcomeScreenState extends State<WelcomeScreen>
+class _MainRegistrationState extends State<MainRegistration>
     with SingleTickerProviderStateMixin {
   AnimationController controller;
   Animation animation;
@@ -72,17 +71,17 @@ class _WelcomeScreenState extends State<WelcomeScreen>
               height: 48.0,
             ),
             RoundedButton(
-              title: 'Log In',
+              title: 'Register as User',
               colour: Colors.lightBlueAccent,
               onPressed: () {
-                Navigator.pushNamed(context, MainLogin.id);
+                Navigator.pushNamed(context, RegistrationScreen1.id);
               },
             ),
             RoundedButton(
-              title: 'Register',
+              title: 'Register as Hospital ',
               colour: Colors.blueAccent,
               onPressed: () {
-                Navigator.pushNamed(context, MainRegistration.id);
+                Navigator.pushNamed(context, RegistrationScreen3.id);
               },
             ),
           ],

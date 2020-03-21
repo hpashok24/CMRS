@@ -1,5 +1,4 @@
-import 'package:flash_chat/screens/login_main.dart';
-import 'package:flash_chat/screens/registration_main.dart';
+import 'package:flash_chat/screens/login_screen_hospital.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'login_screen.dart';
@@ -7,14 +6,14 @@ import 'registration_screen.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flash_chat/components/rounded_button.dart';
 
-class WelcomeScreen extends StatefulWidget {
-  static const String id = 'welcome_screen';
+class MainLogin extends StatefulWidget {
+  static const String id = 'main_login_screen';
 
   @override
-  _WelcomeScreenState createState() => _WelcomeScreenState();
+  _MainLoginState createState() => _MainLoginState();
 }
 
-class _WelcomeScreenState extends State<WelcomeScreen>
+class _MainLoginState extends State<MainLogin>
     with SingleTickerProviderStateMixin {
   AnimationController controller;
   Animation animation;
@@ -72,17 +71,18 @@ class _WelcomeScreenState extends State<WelcomeScreen>
               height: 48.0,
             ),
             RoundedButton(
-              title: 'Log In',
+              title: 'Login as User',
               colour: Colors.lightBlueAccent,
               onPressed: () {
-                Navigator.pushNamed(context, MainLogin.id);
+                Navigator.pushNamed(context, LoginScreen1.id);
               },
             ),
             RoundedButton(
-              title: 'Register',
+              title: 'Login as Hospital ',
               colour: Colors.blueAccent,
               onPressed: () {
-                Navigator.pushNamed(context, MainRegistration.id);
+                //:Todo push registration screen
+                Navigator.pushNamed(context, LoginScreen2.id);
               },
             ),
           ],
