@@ -1,20 +1,10 @@
 import 'package:flash_chat/screens/inputpage.dart';
-import 'package:flash_chat/screens/login_main.dart';
-import 'package:flash_chat/screens/registration_main.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'login_screen.dart';
-import 'registration_screen.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flash_chat/components/rounded_button.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:flash_chat/screens/prioritizer_screen.dart';
-import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:flash_chat/constants.dart';
-import 'package:geolocator/geolocator.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/services.dart';
 import 'package:edge_alert/edge_alert.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -33,9 +23,7 @@ class MapUtils {
   }
 }
 
-getHospitalLocations(int n) async {
-  return await Firestore.instance.collection('hospitals').where('beds', isGreaterThan: n).getDocuments();
-}
+
 
 class UserOptions extends StatefulWidget {
   static const String id = 'user_options_screen';
@@ -51,38 +39,20 @@ class _UserOptionsState extends State<UserOptions>
 
 
   Position position;
-  GeoPoint myLocation = GeoPoint(0.1,0.2);
+  GeoPoint myLocation = GeoPoint(56,-122);
   //final firebaseAdmin = require('firebase-admin');
-  void getLocation() async {
-    try {
-      position = await Geolocator().getLastKnownPosition(desiredAccuracy: LocationAccuracy.high);
-      myLocation = GeoPoint(position.latitude,position.longitude);
-      print(position);
-      EdgeAlert.show(context, title: 'Your location', description: '$position', gravity: EdgeAlert.BOTTOM);
-    }
-    on PlatformException catch(e){
-      if(e.code == 'PERMISSION_DISABLED'){
-        //error = 'Permission denied';
-        EdgeAlert.show(context, title: 'Your location', description: 'Please Switch on your location in phone', gravity: EdgeAlert.BOTTOM);
 
-      }
-      else{
-        print(position);
-        EdgeAlert.show(context, title: 'Your location', description: '$position', gravity: EdgeAlert.BOTTOM);
-      }
-
-    }
-
+  getHospitalLocations(int n) async {
+    return await Firestore.instance.collection('hospitals').where('beds', isGreaterThan: n).getDocuments();
   }
+
 
   @override
   void initState() {
     super.initState();
 
-    controller =
-        AnimationController(duration: Duration(seconds: 1), vsync: this);
-    animation = ColorTween(begin: Colors.blueGrey, end: Colors.white)
-        .animate(controller);
+    controller = AnimationController(duration: Duration(seconds: 1), vsync: this);
+    animation = ColorTween(begin: Colors.blueGrey, end: Colors.white).animate(controller);
     controller.forward();
     controller.addListener(() {
       setState(() {});
@@ -96,6 +66,102 @@ class _UserOptionsState extends State<UserOptions>
   }
 
   QuerySnapshot querySnapshot;
+  List<String> locations = [];
+  List<double> distances = [];
+  GeoPoint minDistanceLocation ;
+
+
+  void getLocation() async {
+    try {
+      position = await Geolocator().getLastKnownPosition(
+          desiredAccuracy: LocationAccuracy.high);
+      myLocation = GeoPoint(position.latitude, position.longitude);
+      print(position);
+      EdgeAlert.show(context, title: 'Your location', description: '$position', gravity: EdgeAlert.BOTTOM);
+
+      for (int i = 0; i < querySnapshot.documents.length; i++) {
+        locations.add(querySnapshot.documents[i].data['location']);
+      }
+      print(locations.length);
+      double min = await Geolocator().distanceBetween(myLocation.latitude, myLocation.longitude, double.parse(locations[0].split(",")[0]), double.parse(locations[0].split(",")[1]));
+      //print(min);
+      int minIndex = 0;
+      for (int i = 1; i < locations.length; i++) {
+        final double endLatitude = double.parse(locations[i].split(",")[0]);
+       // print(endLatitude);
+
+        final double endLongitude = double.parse(locations[i].split(",")[1]);
+       // print(endLongitude);
+
+        double myDistances = await Geolocator().distanceBetween(
+            myLocation.latitude, myLocation.longitude, endLatitude,
+            endLongitude);
+        if(myDistances<min){
+          min = myDistances;
+          minIndex = i;
+        }
+        //print(myDistances);
+       // print(minIndex);
+      }
+      //print("hello");
+      //print(distances[0]);
+      //print(distances.length);
+      //print(minIndex);
+
+     minDistanceLocation = GeoPoint(double.parse(locations[minIndex].split(",")[0]), double.parse(locations[minIndex].split(",")[1]));
+     MapUtils.openMap(minDistanceLocation.latitude,minDistanceLocation.longitude);
+    }
+
+
+    on PlatformException catch(e){
+      if(e.code == 'PERMISSION_DISABLED'){
+        //error = 'Permission denied';
+        EdgeAlert.show(context, title: 'Your location', description: 'Please Switch on your location in phone', gravity: EdgeAlert.BOTTOM);
+
+      }
+      else{
+        print(position);
+        EdgeAlert.show(context, title: 'Your location', description: '$position', gravity: EdgeAlert.BOTTOM);
+      }
+
+    }
+    // return myLocation;
+  }
+
+
+  /*void calculateDistance() async {
+     //print(querySnapshot.documents.length);
+    for (int i = 0; i < querySnapshot.documents.length; i++) {
+      locations.add(querySnapshot.documents[i].data['location']);
+    }
+  //print(locations.length);
+    double min = await Geolocator().distanceBetween(myLocation.latitude, myLocation.longitude, double.parse(locations[0].split(",")[0]), double.parse(locations[0].split(",")[1]));
+    int minIndex = -1;
+    for (int i = 1; i < locations.length; i++) {
+      final double endLatitude = double.parse(locations[i].split(",")[0]);
+      //print(endLatitude);
+
+      final double endLongitude = double.parse(locations[i].split(",")[1]);
+     // print(endLongitude);
+
+      double myDistances = await Geolocator().distanceBetween(
+          myLocation.latitude, myLocation.longitude, endLatitude,
+          endLongitude);
+      if(myDistances<min){
+        min = myDistances;
+        minIndex = i;
+      }
+      //print(myDistances);
+    }
+    //print("hello");
+    //print(distances[0]);
+    //print(distances.length);
+
+    minDistanceLocation = GeoPoint(double.parse(locations[minIndex].split(",")[0]), double.parse(locations[minIndex].split(",")[1]));
+
+
+    //return minDistanceLocation;
+  }*/
 
   @override
   void dispose() {
@@ -103,39 +169,10 @@ class _UserOptionsState extends State<UserOptions>
     super.dispose();
   }
 
-  List<String> locations = [];
-  List<double> distances = [];
-  GeoPoint minDistanceLocation ;
-
-  void calculateDistance() async {
-    for (int i = 0; i < querySnapshot.documents.length; i++) {
-      locations.add(querySnapshot.documents[i].data['location']);
-    }
-
-    for (int i = 0; i < locations.length; i++) {
-      final double endLatitude = double.parse(locations[i].split(",")[0]);
-      final double endLongitude = double.parse(locations[i].split(",")[1]);
-      distances[i] = await Geolocator().distanceBetween(
-          myLocation.latitude, myLocation.longitude, endLatitude,
-          endLongitude);
-    }
-
-    int min = -1;
-    double minDistance = 0.0;
-    for (int i = 0; i < locations.length; i++) {
-      if (distances[i] < minDistance) {
-        minDistance = distances[i];
-        min = i;
-      }
-    }
-
-    minDistanceLocation = GeoPoint(double.parse(locations[min].split(",")[0]),
-        double.parse(locations[min].split(",")[0]));
-  }
-
-
     @override
   Widget build(BuildContext context) {
+
+   // Future<GeoPoint> mylocation;
     return Scaffold(
       backgroundColor: animation.value,
       body: Padding(
@@ -177,10 +214,8 @@ class _UserOptionsState extends State<UserOptions>
               title: 'Get nearest hospital (self ambulance)',
               colour: Colors.blueAccent,
               onPressed: () {
-                getLocation();
+               getLocation();
                 //calculateDistance();
-                MapUtils.openMap(myLocation.latitude,myLocation.longitude);
-
                 //Navigator.pushNamed(context, MainRegistration.id);
               },
             ),
