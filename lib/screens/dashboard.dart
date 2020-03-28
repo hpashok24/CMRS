@@ -46,19 +46,36 @@ class _Hospital_DashboardState extends State<Hospital_Dashboard> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   Text(
-                    'Ambulances',
+                    'Please Update the number of ambulances',
                     style: kLabelTextStyle,
                   ),
-
-                  Text(
-                    ambulance.toString(),
-                    style: kNumberTextStyle,
+                  SizedBox(
+                    height: 10,
                   ),
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: <Widget>[
+                      SizedBox(
+                        width: 30,
+                      ),
                       IconContent(
                         icon: FontAwesomeIcons.ambulance,
+                        label: 'ambulances',
+                      ),
+                      SizedBox(
+                        width: 90,
+                      ),
+                      Text(
+                        ambulance.toString(),
+                        style: kNumberTextStyle,
+                      ),
+                    ],
+                  ),
+
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      SizedBox(
+                          width: 100
                       ),
 
                       RoundIconButton(
@@ -66,13 +83,18 @@ class _Hospital_DashboardState extends State<Hospital_Dashboard> {
                         onPressed: () {
                           setState(
                                 () {
-                              ambulance--;
+                              if(ambulance>0)   {
+                                ambulance--;
+                              }
+                             else{
+                                EdgeAlert.show(context, title: 'invalid input', description: 'cannot be less than 0', gravity: EdgeAlert.BOTTOM);
+                              }
                             },
                           );
                         },
                       ),
                       SizedBox(
-                        width: 10.0,
+                        width: 20.0,
                       ),
                       RoundIconButton(
                           icon: FontAwesomeIcons.plus,
@@ -94,28 +116,53 @@ class _Hospital_DashboardState extends State<Hospital_Dashboard> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   Text(
-                    'Ambulances',
+                    'Please Update the number of beds',
                     style: kLabelTextStyle,
                   ),
-                  Text(
-                    ambulance.toString(),
-                    style: kNumberTextStyle,
+                  Row(
+                    children: <Widget>[
+                      SizedBox(
+                        width: 30,
+                      ),
+                      IconContent(
+                        icon: FontAwesomeIcons.bed,
+                        label: 'icu beds',
+                      ),
+                      SizedBox(
+                        width: 100,
+                      ),
+                      Text(
+                        beds.toString(),
+                        style: kNumberTextStyle,
+                      ),
+                    ],
                   ),
+
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
+
+                      SizedBox(
+                        width: 100
+                      ),
+
                       RoundIconButton(
                         icon: FontAwesomeIcons.minus,
                         onPressed: () {
                           setState(
                                 () {
-                              beds--;
+                                  if(beds>0)   {
+                                    beds--;
+                                  }
+                                  else{
+                                    EdgeAlert.show(context, title: 'invalid input', description: 'cannot be less than 0', gravity: EdgeAlert.BOTTOM);
+                                  }
                             },
                           );
                         },
                       ),
                       SizedBox(
-                        width: 10.0,
+                        width: 20.0,
                       ),
                       RoundIconButton(
                           icon: FontAwesomeIcons.plus,

@@ -1,4 +1,5 @@
 import 'package:flash_chat/screens/inputpage.dart';
+import 'package:flash_chat/screens/user_options.dart';
 import 'package:flash_chat/screens/welcome_screen.dart';
 import 'package:edge_alert/edge_alert.dart';
 
@@ -80,7 +81,7 @@ class _LoginScreenState1 extends State<LoginScreen1> {
                     final user = await _auth.signInWithEmailAndPassword(
                         email: email, password: password);
                     if (user != null) {
-                      Navigator.pushNamed(context, InputPage.id);
+                      Navigator.pushNamed(context, UserOptions.id);
                     }
 
                     setState(() {
