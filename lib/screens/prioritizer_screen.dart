@@ -3,6 +3,25 @@ import 'package:flutter/material.dart';
 import 'package:flash_chat/story_brain.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:edge_alert/edge_alert.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:flutter/services.dart';
+
+
+class MapUtils {
+
+  MapUtils._();
+
+  static Future<void> openMap(double latitude, double longitude) async {
+    String googleUrl = 'https://www.google.com/maps/search/?api=1&query=$latitude,$longitude';
+    if (await canLaunch(googleUrl)) {
+      await launch(googleUrl);
+    } else {
+      throw 'Could not open the map.';
+    }
+  }
+}
 
 //TODO: Step 9 - Create a new storyBrain object from the StoryBrain class.
 StoryBrain storyBrain = StoryBrain();
@@ -16,6 +35,12 @@ class StoryPage extends StatefulWidget {
 
 class _StoryPageState extends State<StoryPage> {
 
+  Position position;
+  GeoPoint myLocation = GeoPoint(56,-122);
+
+  getHospitalLocations(int n) async {
+    return await Firestore.instance.collection('hospitals').where('beds', isGreaterThan: n).getDocuments();
+  }
   int number=108;
   int mnumber= 09844088147;
 
@@ -31,6 +56,63 @@ class _StoryPageState extends State<StoryPage> {
 
   bool giveAlert(){
     return storyBrain.alert();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getHospitalLocations(0).then((results) {
+      setState(() {
+        querySnapshot = results;
+      });
+    });
+  }
+
+
+  QuerySnapshot querySnapshot;
+  List<String> locations = [];
+  List<double> distances = [];
+  GeoPoint minDistanceLocation ;
+
+  void getLocation() async {
+    try {
+      position = await Geolocator().getLastKnownPosition(
+          desiredAccuracy: LocationAccuracy.high);
+      myLocation = GeoPoint(position.latitude, position.longitude);
+      print(position);
+      EdgeAlert.show(context, title: 'Your location', description: '$position', gravity: EdgeAlert.BOTTOM);
+
+      for (int i = 0; i < querySnapshot.documents.length; i++) {
+        locations.add(querySnapshot.documents[i].data['location']);
+      }
+      print(locations.length);
+      double min = await Geolocator().distanceBetween(myLocation.latitude, myLocation.longitude, double.parse(locations[0].split(",")[0]), double.parse(locations[0].split(",")[1]));
+      int minIndex = 0;
+      for (int i = 1; i < locations.length; i++) {
+        final double endLatitude = double.parse(locations[i].split(",")[0]);
+        final double endLongitude = double.parse(locations[i].split(",")[1]);
+        double myDistances = await Geolocator().distanceBetween(
+            myLocation.latitude, myLocation.longitude, endLatitude,
+            endLongitude);
+        if(myDistances<min){
+          min = myDistances;
+          minIndex = i;
+        }
+      }
+      minDistanceLocation = GeoPoint(double.parse(locations[minIndex].split(",")[0]), double.parse(locations[minIndex].split(",")[1]));
+      MapUtils.openMap(minDistanceLocation.latitude,minDistanceLocation.longitude);
+    }
+    on PlatformException catch(e){
+      if(e.code == 'PERMISSION_DISABLED'){
+        //error = 'Permission denied';
+        EdgeAlert.show(context, title: 'Your location', description: 'Please Switch on your location in phone', gravity: EdgeAlert.BOTTOM);
+
+      }
+      else{
+        print(position);
+        EdgeAlert.show(context, title: 'Your location', description: '$position', gravity: EdgeAlert.BOTTOM);
+      }
+    }
   }
 
   @override
@@ -86,7 +168,7 @@ class _StoryPageState extends State<StoryPage> {
                               ),
                               width: 120,
                               onPressed: () {
-                                //:Todo write a query to get all the documents data having geo coordinates where ambulance >0
+                                getLocation();
                                 storyBrain.restart();
                                 Navigator.pop(context);
                               },
