@@ -12,8 +12,6 @@ import 'package:flash_chat/screens/user_options.dart';
 import 'package:flash_chat/screens/hospital_details.dart';
 import 'package:flash_chat/screens/registration_hospital.dart';
 import 'package:flash_chat/screens/dashboard.dart';
-
-import 'screens/welcome_screen.dart';
 void main() => runApp(FlashChat());
 
 class FlashChat extends StatelessWidget {
@@ -25,7 +23,7 @@ class FlashChat extends StatelessWidget {
         DeviceOrientation.portraitDown,
       ]);
     return MaterialApp(
-      initialRoute: WelcomeScreen.id,
+      initialRoute: UserOptions.id,
       routes: {
 
         LoginScreen2.id: (context) =>             LoginScreen2(),

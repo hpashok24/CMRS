@@ -84,7 +84,55 @@ const kTextFieldInputDecoration = InputDecoration(
   filled: true,
   fillColor: Colors.white,
 
-  hintText: 'Enter Patient Name',
+  hintText: 'Enter the hospital Name',
+  hintStyle: TextStyle(
+    color: Colors.grey,
+  ),
+  border: OutlineInputBorder(
+    borderRadius: BorderRadius.all(
+      Radius.circular(10.0),
+    ),
+    borderSide: BorderSide.none,
+  ),
+);
+
+const kTextFieldInputDecoration2 = InputDecoration(
+  filled: true,
+  fillColor: Colors.white,
+
+  hintText: 'Enter the phone number',
+  hintStyle: TextStyle(
+    color: Colors.grey,
+  ),
+  border: OutlineInputBorder(
+    borderRadius: BorderRadius.all(
+      Radius.circular(10.0),
+    ),
+    borderSide: BorderSide.none,
+  ),
+);
+
+const kTextFieldInputDecoration3 = InputDecoration(
+  filled: true,
+  fillColor: Colors.white,
+
+  hintText: 'Enter the number of beds',
+  hintStyle: TextStyle(
+    color: Colors.grey,
+  ),
+  border: OutlineInputBorder(
+    borderRadius: BorderRadius.all(
+      Radius.circular(10.0),
+    ),
+    borderSide: BorderSide.none,
+  ),
+);
+
+const kTextFieldInputDecoration4 = InputDecoration(
+  filled: true,
+  fillColor: Colors.white,
+
+  hintText: 'Enter the number of ambulances',
   hintStyle: TextStyle(
     color: Colors.grey,
   ),

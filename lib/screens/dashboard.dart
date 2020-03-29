@@ -85,6 +85,7 @@ class _Hospital_DashboardState extends State<Hospital_Dashboard> {
                                 () {
                               if(ambulance>0)   {
                                 ambulance--;
+
                               }
                              else{
                                 EdgeAlert.show(context, title: 'invalid input', description: 'cannot be less than 0', gravity: EdgeAlert.BOTTOM);

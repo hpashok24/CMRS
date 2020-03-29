@@ -1,3 +1,4 @@
+import 'package:flash_chat/screens/dashboard.dart';
 import 'package:flash_chat/screens/prioritizer_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -20,9 +21,10 @@ class HospitalDetails extends StatefulWidget {
 class _HospitalDetailsState extends State<HospitalDetails> {
   String gender;
 
-  int beds = 20;
-  int ambulance =0;
-  String patient;
+  String beds ;
+  String ambulance;
+  String hospital_name;
+  String phone_number;
   Position position;
   GeoPoint myLocation;
   //final firebaseAdmin = require('firebase-admin');
@@ -68,13 +70,13 @@ class _HospitalDetailsState extends State<HospitalDetails> {
       resizeToAvoidBottomPadding: false,
       appBar: AppBar(
         backgroundColor: Colors.teal,
-        title: Text('Report incident'),
+        title: Text('Registration  details'),
       ),
       body: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            Expanded(
+            /*Expanded(
                 child: Row(
                   children: <Widget>[
 
@@ -108,7 +110,7 @@ label: 'Location',
                       ),
                     ),
                   ],
-                )),
+                )),*/
             Expanded(
               child: ReusableCard(
                 colour: kActiveCardColour,
@@ -116,7 +118,7 @@ label: 'Location',
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     Text(
-                      'Details ',
+                      'Hospital details ',
                       style: kLabelTextStyle,
 
                     ),
@@ -128,7 +130,102 @@ label: 'Location',
                         ),
                         decoration: kTextFieldInputDecoration,
                         onChanged: (value) {
-                          patient = value;
+                          hospital_name = value;
+                          print(value);
+                        },
+                      ),
+                    ),
+
+                    Container(
+                      padding: EdgeInsets.all(20),
+                      child: TextField(
+                        style: TextStyle(
+                          color: Colors.black,
+                        ),
+                        decoration: kTextFieldInputDecoration2,
+                        onChanged: (value) {
+                          phone_number = value;
+                          print(value);
+                        },
+                      ),
+                    ),
+
+                    Container(
+                      padding: EdgeInsets.all(20),
+                      child: TextField(
+                        style: TextStyle(
+                          color: Colors.black,
+                        ),
+                        decoration: kTextFieldInputDecoration3,
+                        onChanged: (value) {
+                          beds = value;
+                          print(value);
+                        },
+                      ),
+                    ),
+
+                    Container(
+                      padding: EdgeInsets.all(20),
+                      child: TextField(
+                        style: TextStyle(
+                          color: Colors.black,
+                        ),
+                        decoration: kTextFieldInputDecoration4,
+                        onChanged: (value) {
+                          ambulance = value;
+                          print(value);
+                        },
+                      ),
+                    ),
+
+                    Row(
+
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+
+                      children: <Widget>[
+
+
+
+                        Text(
+                          'press to enter location',
+                          style: kLabelTextStyle,
+
+
+                        ),
+
+
+                        FloatingActionButton(
+                          onPressed: getLocation,
+
+
+                        ),
+                      ],
+                    ),
+
+                  ],
+                ),
+              ),
+            ),
+           /* Expanded(
+              child: ReusableCard(
+                colour: kActiveCardColour,
+                cardChild: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Text(
+                      'Phone number ',
+                      style: kLabelTextStyle,
+
+                    ),
+                    Container(
+                      padding: EdgeInsets.all(20),
+                      child: TextField(
+                        style: TextStyle(
+                          color: Colors.black,
+                        ),
+                        decoration: kTextFieldInputDecoration2,
+                        onChanged: (value) {
+                          phone_number = value;
                           print(value);
                         },
                       ),
@@ -148,12 +245,12 @@ label: 'Location',
                   ],
                 ),
               ),
-            ),
+            ),*/
 
 
 
             //location and age
-            Expanded(
+            /*Expanded(
               child: Row(
                 children: <Widget>[
                   Expanded(
@@ -206,7 +303,7 @@ label: 'Location',
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
                           Text(
-                            'AGE',
+                            'ICU beds',
                             style: kLabelTextStyle,
                           ),
                           Text(
@@ -244,9 +341,9 @@ label: 'Location',
                   ),
                 ],
               ),
-            ),
+            ),*/
             BottomButton(
-              buttonTitle: 'Request CMRS',
+              buttonTitle: 'Register Hospital for CMRS',
               onTap: () {
                 //if(gender != null)
                 /*_firestore.collection('user_details').add({
@@ -259,7 +356,10 @@ label: 'Location',
 
                 var citiesRef = _firestore.collection('user_details');
 
-                Navigator.pushNamed(context, StoryPage.id);
+                getLocation();
+                Navigator.popAndPushNamed(context, Hospital_Dashboard.id);
+
+
               },
             ),
           ],
