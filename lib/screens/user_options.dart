@@ -1,4 +1,5 @@
 import 'package:flash_chat/screens/inputpage.dart';
+import 'package:flash_chat/screens/login_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
@@ -227,6 +228,7 @@ class _UserOptionsState extends State<UserOptions>
 
                   onPressed: () {
                     /*...*///:Todo signout function
+                    Navigator.popAndPushNamed(context, LoginScreen1.id);
                   },
                   child: Text(
                     "Logout",

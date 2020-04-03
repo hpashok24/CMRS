@@ -1,5 +1,6 @@
 
 import 'package:flash_chat/components/icon_content.dart';
+import 'package:flash_chat/screens/login_screen_hospital.dart';
 import 'package:flash_chat/screens/prioritizer_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -58,6 +59,7 @@ class _Hospital_DashboardState extends State<Hospital_Dashboard> {
 
                 onPressed: () {
                   /*...*///:Todo signout function
+                  Navigator.popAndPushNamed(context, LoginScreen2.id);
                 },
                 child: Text(
                   "Logout",
