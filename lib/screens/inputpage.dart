@@ -6,7 +6,6 @@ import 'package:geolocator/geolocator.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/services.dart';
 import 'package:edge_alert/edge_alert.dart';
-
 import 'package:flash_chat/components/bottom_button.dart';
 import 'package:flash_chat/components/round_icon_button.dart';
 
@@ -18,13 +17,13 @@ class InputPage extends StatefulWidget {
 }
 
 class _InputPageState extends State<InputPage> {
-  String gender;
 
+  String gender;
   int age = 20;
   String patient;
   Position position;
   GeoPoint myLocation;
-  //final firebaseAdmin = require('firebase-admin');
+
   void getLocation() async {
     try {
       position = await Geolocator().getLastKnownPosition(desiredAccuracy: LocationAccuracy.high);
@@ -36,15 +35,12 @@ class _InputPageState extends State<InputPage> {
       if(e.code == 'PERMISSION_DISABLED'){
         //error = 'Permission denied';
         EdgeAlert.show(context, title: 'Your location', description: 'Please Switch on your location in phone', gravity: EdgeAlert.BOTTOM);
-
       }
       else{
         print(position);
         EdgeAlert.show(context, title: 'Your location', description: '$position', gravity: EdgeAlert.BOTTOM);
       }
-
     }
-
   }
 
   TextEditingController _controller;
@@ -220,7 +216,7 @@ class _InputPageState extends State<InputPage> {
               buttonTitle: 'Request CMRS',
               onTap: () {
                 //if(gender != null)
-                _firestore.collection('user_details').add({
+                _firestore.collection('user_details').document(patient).setData({
                   'age': age,
                   'gender': gender,
                   'name': patient,
@@ -230,7 +226,7 @@ class _InputPageState extends State<InputPage> {
 
                 var citiesRef = _firestore.collection('user_details');
 
-                Navigator.pushNamed(context, StoryPage.id);
+                Navigator.pushNamed(context, Prioritisation.id);
               },
             ),
           ],

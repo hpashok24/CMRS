@@ -23,8 +23,8 @@ class Hospital_Dashboard extends StatefulWidget {
 
 class _Hospital_DashboardState extends State<Hospital_Dashboard> {
 
-  int ambulance =0;
-  int beds=0;
+  int ambulance = 0;
+  int beds = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -59,7 +59,7 @@ class _Hospital_DashboardState extends State<Hospital_Dashboard> {
                       ),
                       IconContent(
                         icon: FontAwesomeIcons.ambulance,
-                        label: 'ambulances',
+                        label: 'Ambulances',
                       ),
                       SizedBox(
                         width: 90,
@@ -127,7 +127,7 @@ class _Hospital_DashboardState extends State<Hospital_Dashboard> {
                       ),
                       IconContent(
                         icon: FontAwesomeIcons.bed,
-                        label: 'icu beds',
+                        label: 'ICU Beds',
                       ),
                       SizedBox(
                         width: 100,

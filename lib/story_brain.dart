@@ -1,16 +1,8 @@
-//TODO: Step 6 - import the story.dart file into this file.
-
-
-
 import 'story.dart';
 
 
-
-
-
-//TODO: Step 5 - Create a new class called StoryBrain.
 class StoryBrain {
-//TODO: Step 7 - Uncomment the lines below to include storyData as a private property in StoryBrain. Hint: You might need to change something in story.dart to make this work.
+
   List<Story> _storyData = [
     //0
     Story(
@@ -82,13 +74,6 @@ class StoryBrain {
 
   void nextStory(int choiceNumber) {
 
-
-
-    /*else if (storynumber == 3 || storynumber == 4 || storynumber == 5) {
-      restart();
-    }*/
-
-
     if (storynumber == 0){
       if (choiceNumber == 1){
         storynumber = 7;
@@ -158,25 +143,7 @@ class StoryBrain {
     else{
       return false;
     }
-
-
   }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
   //TODO: Step 23 - Use the storyNumber property inside getStory(), getChoice1() and getChoice2() so that it gets the updated story and choices rather than always just the first (0th) one.
 
 //TODO: Step 8 - Create a method called getStory() that returns the first storyTitle from _storyData.
@@ -205,7 +172,6 @@ class StoryBrain {
 
 //TODO: Step 27 - Create a method called buttonShouldBeVisible() which checks to see if storyNumber is 0 or 1 or 2 (when both buttons should show choices) and return true if that is the case, else it should return false.
   bool buttonShouldBeVisible() {
-    //You could also just check if (storynumber < 3)
     if (storynumber == 7 || storynumber == 8 || storynumber == 9 || storynumber == 10 ) {
       return false;
     } else {

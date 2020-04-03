@@ -9,10 +9,9 @@ import 'package:geolocator/geolocator.dart';
 import 'package:flutter/services.dart';
 
 
-class MapUtils {
+class GoogleMaps {
 
-  MapUtils._();
-
+  GoogleMaps._();
   static Future<void> openMap(double latitude, double longitude) async {
     String googleUrl = 'https://www.google.com/maps/search/?api=1&query=$latitude,$longitude';
     if (await canLaunch(googleUrl)) {
@@ -26,14 +25,15 @@ class MapUtils {
 //TODO: Step 9 - Create a new storyBrain object from the StoryBrain class.
 StoryBrain storyBrain = StoryBrain();
 
-class StoryPage extends StatefulWidget {
+
+class Prioritisation extends StatefulWidget {
 
   static const String id = 'story_screen';
 
-  _StoryPageState createState() => _StoryPageState();
+  _PrioritisationState createState() => _PrioritisationState();
 }
 
-class _StoryPageState extends State<StoryPage> {
+class _PrioritisationState extends State<Prioritisation> {
 
   Position position;
   GeoPoint myLocation = GeoPoint(56,-122);
@@ -74,7 +74,7 @@ class _StoryPageState extends State<StoryPage> {
   List<double> distances = [];
   GeoPoint minDistanceLocation ;
 
-  void getLocation() async {
+  void getLocationOfNearestHospital() async {
     try {
       position = await Geolocator().getLastKnownPosition(
           desiredAccuracy: LocationAccuracy.high);
@@ -100,13 +100,12 @@ class _StoryPageState extends State<StoryPage> {
         }
       }
       minDistanceLocation = GeoPoint(double.parse(locations[minIndex].split(",")[0]), double.parse(locations[minIndex].split(",")[1]));
-      MapUtils.openMap(minDistanceLocation.latitude,minDistanceLocation.longitude);
+      GoogleMaps.openMap(minDistanceLocation.latitude,minDistanceLocation.longitude);
     }
     on PlatformException catch(e){
       if(e.code == 'PERMISSION_DISABLED'){
         //error = 'Permission denied';
         EdgeAlert.show(context, title: 'Your location', description: 'Please Switch on your location in phone', gravity: EdgeAlert.BOTTOM);
-
       }
       else{
         print(position);
@@ -168,7 +167,7 @@ class _StoryPageState extends State<StoryPage> {
                               ),
                               width: 120,
                               onPressed: () {
-                                getLocation();
+                                getLocationOfNearestHospital();
                                 storyBrain.restart();
                                 Navigator.pop(context);
                               },

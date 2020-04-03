@@ -23,7 +23,7 @@ class FlashChat extends StatelessWidget {
         DeviceOrientation.portraitDown,
       ]);
     return MaterialApp(
-      initialRoute: UserOptions.id,
+      initialRoute: WelcomeScreen.id,
       routes: {
 
         LoginScreen2.id: (context) =>             LoginScreen2(),
@@ -31,7 +31,7 @@ class FlashChat extends StatelessWidget {
         WelcomeScreen.id: (context) =>          WelcomeScreen(),
         LoginScreen1.id: (context) =>             LoginScreen1(),
         RegistrationScreen1.id: (context) =>      RegistrationScreen1(),
-        StoryPage.id: (context) =>               StoryPage(),
+        Prioritisation.id: (context) =>               Prioritisation(),
         InputPage.id: (context)=>                InputPage(),
         MainLogin.id: (context)=>                MainLogin(),
         MainRegistration.id: (context)=>                MainRegistration(),

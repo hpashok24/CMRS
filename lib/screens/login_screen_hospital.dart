@@ -1,3 +1,4 @@
+import 'package:flash_chat/screens/dashboard.dart';
 import 'package:flash_chat/screens/hospital_details.dart';
 import 'package:flash_chat/screens/inputpage.dart';
 import 'package:flash_chat/screens/login_main.dart';
@@ -83,7 +84,7 @@ class _LoginScreenState2 extends State<LoginScreen2> {
                         email: email, password: password);
                     if (user != null) {
                       //:Todo hospital dash board
-                      Navigator.pushNamed(context, HospitalDetails.id);
+                      Navigator.pushNamed(context, Hospital_Dashboard.id);
 
                     }
 

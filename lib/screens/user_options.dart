@@ -9,9 +9,9 @@ import 'package:flutter/services.dart';
 import 'package:edge_alert/edge_alert.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class MapUtils {
+class GoogleMaps {
 
-  MapUtils._();
+  GoogleMaps._();
 
   static Future<void> openMap(double latitude, double longitude) async {
     String googleUrl = 'https://www.google.com/maps/search/?api=1&query=$latitude,$longitude';
@@ -67,7 +67,6 @@ class _UserOptionsState extends State<UserOptions>
 
   QuerySnapshot querySnapshot;
   List<String> locations = [];
-  List<double> distances = [];
   GeoPoint minDistanceLocation ;
 
 
@@ -78,21 +77,15 @@ class _UserOptionsState extends State<UserOptions>
       myLocation = GeoPoint(position.latitude, position.longitude);
       print(position);
       EdgeAlert.show(context, title: 'Your location', description: '$position', gravity: EdgeAlert.BOTTOM);
-
       for (int i = 0; i < querySnapshot.documents.length; i++) {
         locations.add(querySnapshot.documents[i].data['location']);
       }
       print(locations.length);
       double min = await Geolocator().distanceBetween(myLocation.latitude, myLocation.longitude, double.parse(locations[0].split(",")[0]), double.parse(locations[0].split(",")[1]));
-      //print(min);
       int minIndex = 0;
       for (int i = 1; i < locations.length; i++) {
         final double endLatitude = double.parse(locations[i].split(",")[0]);
-       // print(endLatitude);
-
         final double endLongitude = double.parse(locations[i].split(",")[1]);
-       // print(endLongitude);
-
         double myDistances = await Geolocator().distanceBetween(
             myLocation.latitude, myLocation.longitude, endLatitude,
             endLongitude);
@@ -100,32 +93,20 @@ class _UserOptionsState extends State<UserOptions>
           min = myDistances;
           minIndex = i;
         }
-        //print(myDistances);
-       // print(minIndex);
       }
-      //print("hello");
-      //print(distances[0]);
-      //print(distances.length);
-      //print(minIndex);
-
      minDistanceLocation = GeoPoint(double.parse(locations[minIndex].split(",")[0]), double.parse(locations[minIndex].split(",")[1]));
-     MapUtils.openMap(minDistanceLocation.latitude,minDistanceLocation.longitude);
+     GoogleMaps.openMap(minDistanceLocation.latitude,minDistanceLocation.longitude);
     }
-
-
     on PlatformException catch(e){
       if(e.code == 'PERMISSION_DISABLED'){
         //error = 'Permission denied';
         EdgeAlert.show(context, title: 'Your location', description: 'Please Switch on your location in phone', gravity: EdgeAlert.BOTTOM);
-
       }
       else{
         print(position);
         EdgeAlert.show(context, title: 'Your location', description: '$position', gravity: EdgeAlert.BOTTOM);
       }
-
     }
-    // return myLocation;
   }
 
 
