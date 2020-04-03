@@ -39,6 +39,35 @@ class _Hospital_DashboardState extends State<Hospital_Dashboard> {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+
+              SizedBox(
+                width: 1,
+              ),
+
+              FlatButton(
+                color: Colors.white,
+                textColor: Colors.black,
+                disabledColor: Colors.grey,
+                disabledTextColor: Colors.black,
+                padding: EdgeInsets.all(8.0),
+                splashColor: Colors.teal,
+
+                onPressed: () {
+                  /*...*///:Todo signout function
+                },
+                child: Text(
+                  "Logout",
+                  style: TextStyle(
+                      decoration: TextDecoration.underline,
+                      fontSize: 10.0),
+                ),
+              )
+            ],
+          ),
           Expanded(
             child: ReusableCard(
               colour: kActiveCardColour,

@@ -1,3 +1,4 @@
+import 'package:flash_chat/screens/dashboard.dart';
 import 'package:flash_chat/screens/hospital_details.dart';
 import 'package:flash_chat/screens/inputpage.dart';
 import 'package:flash_chat/screens/registration_main.dart';
@@ -84,7 +85,7 @@ class _RegistrationScreen3State extends State<RegistrationScreen3> {
                     if (newUser != null) {
                       //:Todo form
 
-                      Navigator.pushNamed(context, HospitalDetails.id);
+                      Navigator.pushNamed(context,HospitalDetails.id);
                     }
 
                     setState(() {

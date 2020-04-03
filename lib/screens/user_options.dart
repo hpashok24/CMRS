@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flash_chat/components/rounded_button.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:flutter/services.dart';
 import 'package:edge_alert/edge_alert.dart';
@@ -110,6 +111,7 @@ class _UserOptionsState extends State<UserOptions>
   }
 
 
+
   /*void calculateDistance() async {
      //print(querySnapshot.documents.length);
     for (int i = 0; i < querySnapshot.documents.length; i++) {
@@ -162,6 +164,7 @@ class _UserOptionsState extends State<UserOptions>
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
+
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
@@ -199,6 +202,40 @@ class _UserOptionsState extends State<UserOptions>
                 //calculateDistance();
                 //Navigator.pushNamed(context, MainRegistration.id);
               },
+            ),
+
+            SizedBox(
+              height: 50,
+            ),
+
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+
+                SizedBox(
+                  width: 1,
+                ),
+
+               FlatButton(
+                  color: Colors.red,
+                  textColor: Colors.white,
+                  disabledColor: Colors.grey,
+                  disabledTextColor: Colors.black,
+                  padding: EdgeInsets.all(8.0),
+                  splashColor: Colors.blueAccent,
+
+                  onPressed: () {
+                    /*...*///:Todo signout function
+                  },
+                  child: Text(
+                    "Logout",
+                    style: TextStyle(
+                        decoration: TextDecoration.underline,
+                        fontSize: 10.0),
+                  ),
+                )
+              ],
             ),
           ],
         ),
