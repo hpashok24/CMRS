@@ -143,3 +143,19 @@ const kTextFieldInputDecoration4 = InputDecoration(
     borderSide: BorderSide.none,
   ),
 );
+
+const kTextFieldInputDecoration5 = InputDecoration(
+  filled: true,
+  fillColor: Colors.white,
+
+  hintText: 'Enter the number of ambulances',
+  hintStyle: TextStyle(
+    color: Colors.black,
+  ),
+  border: OutlineInputBorder(
+    borderRadius: BorderRadius.all(
+      Radius.circular(10.0),
+    ),
+    borderSide: BorderSide.none,
+  ),
+);

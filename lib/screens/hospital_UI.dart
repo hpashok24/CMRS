@@ -1,7 +1,8 @@
 import 'dart:math';
-
+import 'package:google_fonts/google_fonts.dart';
 import 'package:flash_chat/screens/chat_screen.dart';
 import 'package:flash_chat/screens/dashboard.dart';
+import 'package:flash_chat/screens/login_screen.dart';
 import 'package:flash_chat/screens/prioritizer_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -17,46 +18,33 @@ import 'package:geolocator/geolocator.dart';
 import 'package:flutter/services.dart';
 import 'package:edge_alert/edge_alert.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-
+import 'package:animated_text_kit/animated_text_kit.dart';
+import 'package:flash_chat/components/bottom_button.dart';
+import 'package:flash_chat/components/round_icon_button.dart';
+import 'package:flash_chat/components/rounded_button.dart';
 import 'package:flash_chat/components/bottom_button.dart';
 import 'package:flash_chat/components/round_icon_button.dart';
 
-import 'package:flash_chat/components/bottom_button.dart';
-import 'package:flash_chat/components/round_icon_button.dart';
 
-import 'dashboard.dart';
-
-
-class HospitalDetails extends StatefulWidget {
-  static const String id = 'hdetails_screen';
+class HospitalUI extends StatefulWidget {
+  static const String id = 'hui_screen';
   @override
-  _HospitalDetailsState createState() => _HospitalDetailsState();
+  _HospitalUIState createState() => _HospitalUIState();
 }
 
-class _HospitalDetailsState extends State<HospitalDetails> {
+class _HospitalUIState extends State<HospitalUI> {
   String gender;
   int bedInt;
   int ambInt;
   String beds ;
   String ambulance;
-  String hospital_name;
+  String hospital_name='';
   String phone_number;
   Position position;
   GeoPoint myLocation;
   String finalLocation;
+
   final auth = FirebaseAuth.instance;
-
-  void sendDataToNextScreen(BuildContext context) {
-    String ambulances = ambulance;
-    String bed = beds;
-    String concat = ambulances+","+bed;
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => Hospital_Dashboard(ambulances: concat,),
-        ));
-  }
-
 
   void getLocation() async {
     try {
@@ -113,131 +101,120 @@ class _HospitalDetailsState extends State<HospitalDetails> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      resizeToAvoidBottomPadding: false,
-      appBar: AppBar(
-        backgroundColor: Colors.teal,
-        title: Text('Registration  details'),
-      ),
-      body: SafeArea(
+    return  Scaffold(
+      backgroundColor: Colors.white,
+
+      body: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 24.0),
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Hero(
+                  tag: 'logo',
+                  child: Container(
+                    child: Image.asset('images/playstore.png'),
+                    height: 60.0,
+                  ),
+                ),
+                TypewriterAnimatedTextKit(
+                  text: ['C M R S'],
+                  textStyle: TextStyle(
+                    fontSize: 45.0,
+                    fontWeight: FontWeight.w900,
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(
+              height: 48.0,
+            ),
 
             Expanded(
               child: ReusableCard(
-                colour: kActiveCardColour,
+                colour: Colors.teal,
                 cardChild: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    Text(
-                      'Hospital details ',
-                      style: kLabelTextStyle,
-
-                    ),
-                    Container(
-                      padding: EdgeInsets.all(20),
-                      child: TextField(
-                        style: TextStyle(
-                          color: Colors.black,
-                        ),
-                        decoration: kTextFieldInputDecoration,
-                        onChanged: (value) {
-                          hospital_name = value;
-                          print(value);
-                        },
-                      ),
+                    SizedBox(
+                      height: 20,
                     ),
 
                     Container(
                       padding: EdgeInsets.all(20),
-                      child: TextField(
-                        style: TextStyle(
-                          color: Colors.black,
-                        ),
-                        decoration: kTextFieldInputDecoration2,
-                        onChanged: (value) {
-                          phone_number = value;
-                          print(value);
-                        },
-                      ),
+
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: <Widget>[
+                          Text('Welcome To Cmrs .',style: GoogleFonts.pacifico(
+                            textStyle: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black
+                            )
+                          ),
+
+                          ),
+
+                          SizedBox(
+                            height: 50,
+                          ),
+
+                          Text('hospital_name', style: GoogleFonts.pacifico(
+                            textStyle: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black
+
+                            ),
+                          )
+
+                          ),
+                        ],
+                      )
                     ),
 
-                    Container(
-                      padding: EdgeInsets.all(20),
-                      child: TextField(
-                        style: TextStyle(
-                          color: Colors.black,
-                        ),
-                        decoration: kTextFieldInputDecoration3,
-                        onChanged: (value) {
-                          beds = value;
-                          bedInt = int.parse(beds);
-                          print(value);
-                        },
-                      ),
-                    ),
-
-                    Container(
-                      padding: EdgeInsets.all(20),
-                      child: TextField(
-                        style: TextStyle(
-                          color: Colors.black,
-                        ),
-                        decoration: kTextFieldInputDecoration4,
-                        onChanged: (value) {
-                          ambulance = value;
-                          ambInt = int.parse(ambulance);
-                          print(value);
-                        },
-                      ),
-                    ),
-
-                    Row(
-
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-
-                      children: <Widget>[
 
 
 
-                        Text(
-                          'press to enter location',
-                          style: kLabelTextStyle,
 
 
-                        ),
 
 
-                        FloatingActionButton(
-                          onPressed: getLocation,
-
-
-                        ),
-                      ],
-                    ),
 
                   ],
                 ),
               ),
             ),
-
-
-
-
-            BottomButton(
-              buttonTitle: 'Register Hospital for CMRS',
-              onTap: () {
-                inputData();
-                sendDataToNextScreen(context);
+            RoundedButton(
+              title: 'Update my beds and ambulances',
+              colour: Colors.lightBlueAccent,
+              onPressed: () {
+                Navigator.pushNamed(context, Hospital_Dashboard.id);
               },
             ),
+
+            SizedBox(
+              width:30,
+            ),
+
+            RoundedButton(
+              title: 'Logout from CMRS',
+              colour: Colors.lightBlueAccent,
+              onPressed: () {
+                Navigator.popAndPushNamed(context, LoginScreen1.id);
+              },
+            ),
+
+
           ],
         ),
       ),
     );
   }
 }
+
 
 
 
