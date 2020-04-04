@@ -4,13 +4,12 @@ import 'package:flash_chat/screens/inputpage.dart';
 import 'package:flash_chat/screens/login_main.dart';
 import 'package:flash_chat/screens/welcome_screen.dart';
 import 'package:edge_alert/edge_alert.dart';
-
 import 'package:flutter/material.dart';
 import 'package:flash_chat/components/rounded_button.dart';
 import 'package:flash_chat/constants.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-
 import 'package:modal_progress_hud/modal_progress_hud.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class LoginScreen2 extends StatefulWidget {
   static const String id = 'login_screen_hospital';
@@ -21,8 +20,26 @@ class LoginScreen2 extends StatefulWidget {
 class _LoginScreenState2 extends State<LoginScreen2> {
   bool showSpinner = false;
   final _auth = FirebaseAuth.instance;
+  final _firestore = Firestore.instance;
   String email;
   String password;
+  String beds;
+  String ambulances;
+
+
+  void initialise() async {
+    final FirebaseUser user = await _auth.currentUser();
+    final uid = user.uid;
+    _firestore.collection('hospitals').document(uid)
+        .get().then((DocumentSnapshot) =>
+    ambulances = DocumentSnapshot.data['ambulances'].toString());
+
+    _firestore.collection('hospitals').document(uid)
+        .get().then((DocumentSnapshot) =>
+    beds = DocumentSnapshot.data['beds'].toString());
+  }
+
+
 
   @override
   Widget build(BuildContext context) {

@@ -8,22 +8,44 @@ import 'package:edge_alert/edge_alert.dart';
 import 'package:flash_chat/components/round_icon_button.dart';
 import 'package:flash_chat/components/reusable_card.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
 class Hospital_Dashboard extends StatefulWidget {
   static const String id = 'hospital_dashboard';
+  final String ambulances;
+  Hospital_Dashboard({Key key, @required this.ambulances}) : super(key: key);
+
   @override
   _Hospital_DashboardState createState() => _Hospital_DashboardState();
 }
 
 class _Hospital_DashboardState extends State<Hospital_Dashboard> {
 
-  int ambulance;
-  int beds;
   final FirebaseAuth auth = FirebaseAuth.instance;
   final _firestore = Firestore.instance;
 
-  void inputData() async {
+  int ambulance = 0;
+  int beds = 0;
+
+  void initialise() async {
+    ambulance = int.parse(widget.ambulances.split(",")[0]);
+    beds = int.parse(widget.ambulances.split(",")[1]);
+  }
+
+
+  void initialise1() async {
+    final FirebaseUser user = await auth.currentUser();
+    final uid = user.uid;
+    _firestore.collection('hospitals').document(uid)
+        .get().then((DocumentSnapshot) =>
+        ambulance = int.parse(DocumentSnapshot.data['ambulances']));
+
+    _firestore.collection('hospitals').document(uid)
+        .get().then((DocumentSnapshot) =>
+        beds = int.parse(DocumentSnapshot.data['beds']));
+  }
+
+
+  void inputDataBeds() async {
     final FirebaseUser user = await auth.currentUser();
     final uid = user.uid;
     _firestore.collection('hospitals').document(uid).updateData({
@@ -31,9 +53,26 @@ class _Hospital_DashboardState extends State<Hospital_Dashboard> {
       });
   }
 
+  void inputDataAmbulances() async {
+    final FirebaseUser user = await auth.currentUser();
+    final uid = user.uid;
+    _firestore.collection('hospitals').document(uid).updateData({
+      'ambulances': ambulance,
+    });
+  }
+
+
   _signOut() async {
     await auth.signOut();
   }
+
+  @override
+  void initState() {
+    super.initState();
+    initialise1();
+    initialise();
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -130,6 +169,7 @@ class _Hospital_DashboardState extends State<Hospital_Dashboard> {
                               }
                             },
                           );
+                          inputDataAmbulances();
                         },
                       ),
                       SizedBox(
@@ -141,6 +181,7 @@ class _Hospital_DashboardState extends State<Hospital_Dashboard> {
                             setState(() {
                               ambulance++;
                             });
+                            inputDataAmbulances();
                           })
                     ],
                   )
@@ -198,7 +239,7 @@ class _Hospital_DashboardState extends State<Hospital_Dashboard> {
                                   }
                             },
                           );
-                          inputData();
+                          inputDataBeds();
                         },
                       ),
                       SizedBox(
@@ -210,7 +251,7 @@ class _Hospital_DashboardState extends State<Hospital_Dashboard> {
                             setState(() {
                               beds++;
                             });
-                            inputData();
+                            inputDataBeds();
                           })
                     ],
                   )

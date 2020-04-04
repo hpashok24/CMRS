@@ -24,6 +24,8 @@ import 'package:flash_chat/components/round_icon_button.dart';
 import 'package:flash_chat/components/bottom_button.dart';
 import 'package:flash_chat/components/round_icon_button.dart';
 
+import 'dashboard.dart';
+
 
 class HospitalDetails extends StatefulWidget {
   static const String id = 'hdetails_screen';
@@ -43,6 +45,18 @@ class _HospitalDetailsState extends State<HospitalDetails> {
   GeoPoint myLocation;
   String finalLocation;
   final auth = FirebaseAuth.instance;
+
+  void sendDataToNextScreen(BuildContext context) {
+    String ambulances = ambulance;
+    String bed = beds;
+    String concat = ambulances+","+bed;
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => Hospital_Dashboard(ambulances: concat,),
+        ));
+  }
+
 
   void getLocation() async {
     try {
@@ -381,7 +395,7 @@ label: 'Location',
               buttonTitle: 'Register Hospital for CMRS',
               onTap: () {
                 inputData();
-                Navigator.popAndPushNamed(context, Hospital_Dashboard.id);
+                sendDataToNextScreen(context);
               },
             ),
           ],
@@ -390,7 +404,6 @@ label: 'Location',
     );
   }
 }
-
 
 
 
