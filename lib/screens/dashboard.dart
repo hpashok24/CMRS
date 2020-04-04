@@ -1,20 +1,14 @@
-
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flash_chat/components/icon_content.dart';
 import 'package:flash_chat/screens/login_screen_hospital.dart';
-import 'package:flash_chat/screens/prioritizer_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flash_chat/constants.dart';
-import 'package:geolocator/geolocator.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/services.dart';
 import 'package:edge_alert/edge_alert.dart';
-
-import 'package:flash_chat/components/bottom_button.dart';
 import 'package:flash_chat/components/round_icon_button.dart';
 import 'package:flash_chat/components/reusable_card.dart';
-
-import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class Hospital_Dashboard extends StatefulWidget {
   static const String id = 'hospital_dashboard';
@@ -24,8 +18,22 @@ class Hospital_Dashboard extends StatefulWidget {
 
 class _Hospital_DashboardState extends State<Hospital_Dashboard> {
 
-  int ambulance = 0;
-  int beds = 0;
+  int ambulance;
+  int beds;
+  final FirebaseAuth auth = FirebaseAuth.instance;
+  final _firestore = Firestore.instance;
+
+  void inputData() async {
+    final FirebaseUser user = await auth.currentUser();
+    final uid = user.uid;
+    _firestore.collection('hospitals').document(uid).updateData({
+      'beds': beds,
+      });
+  }
+
+  _signOut() async {
+    await auth.signOut();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -50,7 +58,7 @@ class _Hospital_DashboardState extends State<Hospital_Dashboard> {
               ),
 
               FlatButton(
-                color: Colors.white,
+                color: Colors.teal,
                 textColor: Colors.black,
                 disabledColor: Colors.grey,
                 disabledTextColor: Colors.black,
@@ -58,7 +66,7 @@ class _Hospital_DashboardState extends State<Hospital_Dashboard> {
                 splashColor: Colors.teal,
 
                 onPressed: () {
-                  /*...*///:Todo signout function
+                  _signOut();
                   Navigator.popAndPushNamed(context, LoginScreen2.id);
                 },
                 child: Text(
@@ -114,9 +122,8 @@ class _Hospital_DashboardState extends State<Hospital_Dashboard> {
                         onPressed: () {
                           setState(
                                 () {
-                              if(ambulance>0)   {
+                              if(ambulance>0) {
                                 ambulance--;
-
                               }
                              else{
                                 EdgeAlert.show(context, title: 'invalid input', description: 'cannot be less than 0', gravity: EdgeAlert.BOTTOM);
@@ -191,6 +198,7 @@ class _Hospital_DashboardState extends State<Hospital_Dashboard> {
                                   }
                             },
                           );
+                          inputData();
                         },
                       ),
                       SizedBox(
@@ -202,6 +210,7 @@ class _Hospital_DashboardState extends State<Hospital_Dashboard> {
                             setState(() {
                               beds++;
                             });
+                            inputData();
                           })
                     ],
                   )

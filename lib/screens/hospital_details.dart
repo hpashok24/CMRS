@@ -43,8 +43,7 @@ class _HospitalDetailsState extends State<HospitalDetails> {
   GeoPoint myLocation;
   String finalLocation;
   final auth = FirebaseAuth.instance;
-  //String username = loggedInUser.uid;
-  //final firebaseAdmin = require('firebase-admin');
+
   void getLocation() async {
     try {
       position = await Geolocator().getLastKnownPosition(desiredAccuracy: LocationAccuracy.high);
@@ -86,7 +85,6 @@ class _HospitalDetailsState extends State<HospitalDetails> {
   void inputData() async {
     final FirebaseUser user = await auth.currentUser();
     final uid = user.uid;
-    // here you write the codes to input the data into firestore
     _firestore.collection('hospitals').document(uid).setData({
       'beds': bedInt,
       'ambulances': ambInt,

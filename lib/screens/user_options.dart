@@ -5,16 +5,15 @@ import 'package:flutter/material.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flash_chat/components/rounded_button.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:flutter/services.dart';
 import 'package:edge_alert/edge_alert.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class GoogleMaps {
 
   GoogleMaps._();
-
   static Future<void> openMap(double latitude, double longitude) async {
     String googleUrl = 'https://www.google.com/maps/search/?api=1&query=$latitude,$longitude';
     if (await canLaunch(googleUrl)) {
@@ -24,7 +23,6 @@ class GoogleMaps {
     }
   }
 }
-
 
 
 class UserOptions extends StatefulWidget {
@@ -42,7 +40,11 @@ class _UserOptionsState extends State<UserOptions>
 
   Position position;
   GeoPoint myLocation = GeoPoint(56,-122);
-  //final firebaseAdmin = require('firebase-admin');
+  final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+
+  _signOut() async {
+    await _firebaseAuth.signOut();
+  }
 
   getHospitalLocations(int n) async {
     return await Firestore.instance.collection('hospitals').where('beds', isGreaterThan: n).getDocuments();
@@ -110,42 +112,6 @@ class _UserOptionsState extends State<UserOptions>
       }
     }
   }
-
-
-
-  /*void calculateDistance() async {
-     //print(querySnapshot.documents.length);
-    for (int i = 0; i < querySnapshot.documents.length; i++) {
-      locations.add(querySnapshot.documents[i].data['location']);
-    }
-  //print(locations.length);
-    double min = await Geolocator().distanceBetween(myLocation.latitude, myLocation.longitude, double.parse(locations[0].split(",")[0]), double.parse(locations[0].split(",")[1]));
-    int minIndex = -1;
-    for (int i = 1; i < locations.length; i++) {
-      final double endLatitude = double.parse(locations[i].split(",")[0]);
-      //print(endLatitude);
-
-      final double endLongitude = double.parse(locations[i].split(",")[1]);
-     // print(endLongitude);
-
-      double myDistances = await Geolocator().distanceBetween(
-          myLocation.latitude, myLocation.longitude, endLatitude,
-          endLongitude);
-      if(myDistances<min){
-        min = myDistances;
-        minIndex = i;
-      }
-      //print(myDistances);
-    }
-    //print("hello");
-    //print(distances[0]);
-    //print(distances.length);
-
-    minDistanceLocation = GeoPoint(double.parse(locations[minIndex].split(",")[0]), double.parse(locations[minIndex].split(",")[1]));
-
-
-    //return minDistanceLocation;
-  }*/
 
   @override
   void dispose() {
@@ -227,7 +193,7 @@ class _UserOptionsState extends State<UserOptions>
                   splashColor: Colors.blueAccent,
 
                   onPressed: () {
-                    /*...*///:Todo signout function
+                    _signOut();
                     Navigator.popAndPushNamed(context, LoginScreen1.id);
                   },
                   child: Text(
