@@ -260,7 +260,7 @@ class _PrioritisationState extends State<Prioritisation> {
                       storyBrain.nextStory(1);
                     });
                   },
-                  color: Colors.red,
+                  color: Colors.green,
                   child: Text(
                     //TODO: Step 13 - Use the storyBrain to get the text for choice 1.
                     storyBrain.getChoice1(),
@@ -288,7 +288,7 @@ class _PrioritisationState extends State<Prioritisation> {
                         storyBrain.nextStory(2);
                       });
                     },
-                    color: Colors.blue,
+                    color: Colors.orange,
                     child: Text(
                       //TODO: Step 14 - Use the storyBrain to get the text for choice 2.
                       storyBrain.getChoice2(),
