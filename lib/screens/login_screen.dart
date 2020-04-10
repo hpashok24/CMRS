@@ -1,13 +1,10 @@
-import 'package:flash_chat/screens/inputpage.dart';
 import 'package:flash_chat/screens/user_options.dart';
 import 'package:flash_chat/screens/welcome_screen.dart';
 import 'package:edge_alert/edge_alert.dart';
-
 import 'package:flutter/material.dart';
 import 'package:flash_chat/components/rounded_button.dart';
 import 'package:flash_chat/constants.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 
 class LoginScreen1 extends StatefulWidget {
@@ -83,7 +80,6 @@ class _LoginScreenState1 extends State<LoginScreen1> {
                     if (user != null) {
                       Navigator.pushNamed(context, UserOptions.id);
                     }
-
                     setState(() {
                       showSpinner = false;
                     });

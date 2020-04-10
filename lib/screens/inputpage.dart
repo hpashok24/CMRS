@@ -23,6 +23,9 @@ class _InputPageState extends State<InputPage> {
   String patient;
   Position position;
   GeoPoint myLocation;
+  final _firestore = Firestore.instance;
+  TextEditingController _controller;
+
 
   void getLocation() async {
     try {
@@ -43,7 +46,6 @@ class _InputPageState extends State<InputPage> {
     }
   }
 
-  TextEditingController _controller;
 
   void initState() {
     super.initState();
@@ -54,8 +56,6 @@ class _InputPageState extends State<InputPage> {
     _controller.dispose();
     super.dispose();
   }
-
-  final _firestore = Firestore.instance;
 
   @override
   Widget build(BuildContext context) {
@@ -115,7 +115,6 @@ class _InputPageState extends State<InputPage> {
                     Text(
                       'Details ',
                       style: kLabelTextStyle,
-
                     ),
                     Container(
                       padding: EdgeInsets.all(20),
@@ -136,19 +135,13 @@ class _InputPageState extends State<InputPage> {
                       textBaseline: TextBaseline.alphabetic,
                       children: <Widget>[
                         Container(
-
-
                         ),
-
                       ],
                     ),
                   ],
                 ),
               ),
             ),
-
-
-
             //location and age
             Expanded(
               child: Row(
@@ -223,9 +216,6 @@ class _InputPageState extends State<InputPage> {
                   'location': myLocation
                 });
                 _firestore.collection('user_details');
-
-                var citiesRef = _firestore.collection('user_details');
-
                 Navigator.pushNamed(context, Prioritisation.id);
               },
             ),
@@ -235,9 +225,6 @@ class _InputPageState extends State<InputPage> {
     );
   }
 }
-
-
-
 
 class ReusableCard extends StatelessWidget {
   ReusableCard({@required this.colour, this.cardChild, this.onPress});

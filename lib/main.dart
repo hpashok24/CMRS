@@ -13,7 +13,6 @@ import 'package:flash_chat/screens/hospital_details.dart';
 import 'package:flash_chat/screens/registration_hospital.dart';
 import 'package:flash_chat/screens/dashboard.dart';
 import 'package:flash_chat/screens/hospital_UI.dart';
-
 import 'screens/dashboard.dart';
 import 'screens/welcome_screen.dart';
 
@@ -43,7 +42,7 @@ class FlashChat extends StatelessWidget {
         UserOptions.id: (context)=>                UserOptions(),
         HospitalDetails.id: (context)=>                HospitalDetails(),
         RegistrationScreen3.id: (context) =>      RegistrationScreen3(),
-        Hospital_Dashboard.id: (context) =>             Hospital_Dashboard(),
+        HospitalDashboard.id: (context) =>             HospitalDashboard(ambulances: null,),
         HospitalUI.id: (context) =>             HospitalUI(),
       },
     );

@@ -1,31 +1,13 @@
-import 'dart:math';
-
-import 'package:flash_chat/screens/chat_screen.dart';
 import 'package:flash_chat/screens/dashboard.dart';
-import 'package:flash_chat/screens/prioritizer_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flash_chat/constants.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/services.dart';
-import 'package:flash_chat/screens/prioritizer_screen.dart';
-import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:flash_chat/constants.dart';
-import 'package:geolocator/geolocator.dart';
-import 'package:flutter/services.dart';
 import 'package:edge_alert/edge_alert.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-
 import 'package:flash_chat/components/bottom_button.dart';
-import 'package:flash_chat/components/round_icon_button.dart';
-
-import 'package:flash_chat/components/bottom_button.dart';
-import 'package:flash_chat/components/round_icon_button.dart';
-
 import 'dashboard.dart';
-
 
 class HospitalDetails extends StatefulWidget {
   static const String id = 'hdetails_screen';
@@ -34,17 +16,21 @@ class HospitalDetails extends StatefulWidget {
 }
 
 class _HospitalDetailsState extends State<HospitalDetails> {
+
   String gender;
   int bedInt;
   int ambInt;
   String beds ;
   String ambulance;
-  String hospital_name;
-  String phone_number;
+  String hospitalName;
+  String phoneNumber;
   Position position;
   GeoPoint myLocation;
   String finalLocation;
+  TextEditingController _controller;
   final auth = FirebaseAuth.instance;
+  final _firestore = Firestore.instance;
+
 
   void sendDataToNextScreen(BuildContext context) {
     String ambulances = ambulance;
@@ -53,7 +39,7 @@ class _HospitalDetailsState extends State<HospitalDetails> {
     Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => Hospital_Dashboard(ambulances: concat,),
+          builder: (context) => HospitalDashboard(ambulances: concat,),
         ));
   }
 
@@ -73,18 +59,14 @@ class _HospitalDetailsState extends State<HospitalDetails> {
       if(e.code == 'PERMISSION_DISABLED'){
         //error = 'Permission denied';
         EdgeAlert.show(context, title: 'Your location', description: 'Please Switch on your location in phone', gravity: EdgeAlert.BOTTOM);
-
       }
       else{
         print(position);
         EdgeAlert.show(context, title: 'Your location', description: '$position', gravity: EdgeAlert.BOTTOM);
       }
-
     }
-
   }
 
-  TextEditingController _controller;
 
   void initState() {
     super.initState();
@@ -102,14 +84,13 @@ class _HospitalDetailsState extends State<HospitalDetails> {
     _firestore.collection('hospitals').document(uid).setData({
       'beds': bedInt,
       'ambulances': ambInt,
-      'name': hospital_name,
+      'name': hospitalName,
       'location': finalLocation,
-      'phone number': phone_number
+      'phone number': phoneNumber
     });
     _firestore.collection('hospitals');
   }
 
-  final _firestore = Firestore.instance;
 
   @override
   Widget build(BuildContext context) {
@@ -123,7 +104,6 @@ class _HospitalDetailsState extends State<HospitalDetails> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-
             Expanded(
               child: ReusableCard(
                 colour: kActiveCardColour,
@@ -133,7 +113,6 @@ class _HospitalDetailsState extends State<HospitalDetails> {
                     Text(
                       'Hospital details ',
                       style: kLabelTextStyle,
-
                     ),
                     Container(
                       padding: EdgeInsets.all(20),
@@ -143,12 +122,11 @@ class _HospitalDetailsState extends State<HospitalDetails> {
                         ),
                         decoration: kTextFieldInputDecoration,
                         onChanged: (value) {
-                          hospital_name = value;
+                          hospitalName = value;
                           print(value);
                         },
                       ),
                     ),
-
                     Container(
                       padding: EdgeInsets.all(20),
                       child: TextField(
@@ -157,12 +135,11 @@ class _HospitalDetailsState extends State<HospitalDetails> {
                         ),
                         decoration: kTextFieldInputDecoration2,
                         onChanged: (value) {
-                          phone_number = value;
+                          phoneNumber = value;
                           print(value);
                         },
                       ),
                     ),
-
                     Container(
                       padding: EdgeInsets.all(20),
                       child: TextField(
@@ -177,7 +154,6 @@ class _HospitalDetailsState extends State<HospitalDetails> {
                         },
                       ),
                     ),
-
                     Container(
                       padding: EdgeInsets.all(20),
                       child: TextField(
@@ -192,44 +168,30 @@ class _HospitalDetailsState extends State<HospitalDetails> {
                         },
                       ),
                     ),
-
                     Row(
-
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-
                       children: <Widget>[
-
-
-
                         Text(
                           'press to enter location',
                           style: kLabelTextStyle,
-
-
                         ),
-
-
                         FloatingActionButton(
                           onPressed: getLocation,
-
-
                         ),
                       ],
                     ),
-
                   ],
                 ),
               ),
             ),
-
-
-
-
             BottomButton(
               buttonTitle: 'Register Hospital for CMRS',
               onTap: () {
+
                 inputData();
+                Navigator.pop(context);
                 sendDataToNextScreen(context);
+
               },
             ),
           ],

@@ -2,7 +2,6 @@ import 'package:flash_chat/screens/login_screen_hospital.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'login_screen.dart';
-import 'registration_screen.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flash_chat/components/rounded_button.dart';
 
@@ -81,7 +80,6 @@ class _MainLoginState extends State<MainLogin>
               title: 'Login as Hospital ',
               colour: Colors.blueAccent,
               onPressed: () {
-                //:Todo push registration screen
                 Navigator.pushNamed(context, LoginScreen2.id);
               },
             ),

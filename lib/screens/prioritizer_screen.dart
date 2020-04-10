@@ -22,14 +22,9 @@ class GoogleMaps {
   }
 }
 
-//TODO: Step 9 - Create a new storyBrain object from the StoryBrain class.
 StoryBrain storyBrain = StoryBrain();
-
-
 class Prioritisation extends StatefulWidget {
-
   static const String id = 'story_screen';
-
   _PrioritisationState createState() => _PrioritisationState();
 }
 
@@ -37,12 +32,17 @@ class _PrioritisationState extends State<Prioritisation> {
 
   Position position;
   GeoPoint myLocation = GeoPoint(56,-122);
+  int number=108;
+  int mnumber= 09844088147;
+  QuerySnapshot querySnapshot;
+  List<String> locations = [];
+  List<double> distances = [];
+  GeoPoint minDistanceLocation ;
+
 
   getHospitalLocations(int n) async {
     return await Firestore.instance.collection('hospitals').where('beds', isGreaterThan: n).getDocuments();
   }
-  int number=108;
-  int mnumber= 09844088147;
 
   void _launchCaller(int number) async{
     var url = "tel:${number.toString()}";
@@ -67,12 +67,6 @@ class _PrioritisationState extends State<Prioritisation> {
       });
     });
   }
-
-
-  QuerySnapshot querySnapshot;
-  List<String> locations = [];
-  List<double> distances = [];
-  GeoPoint minDistanceLocation ;
 
   void getLocationOfNearestHospital() async {
     try {
@@ -134,7 +128,6 @@ class _PrioritisationState extends State<Prioritisation> {
                 flex: 12,
                 child: Center(
                   child: Text(
-                    //TODO: Step 10 - use the storyBrain to get the first story title and display it in this Text Widget.
                     storyBrain.getStory(),
                     style: TextStyle(
                         fontSize: 25.0,
@@ -147,9 +140,6 @@ class _PrioritisationState extends State<Prioritisation> {
                 flex: 2,
                 child: FlatButton(
                   onPressed: () {
-                    //Choice 1 made by user.
-                    //TODO: Step 18 - Call the nextStory() method from storyBrain and pass the number 1 as the choice made by the user.
-                    //TODO: Step 24 - Run the app and try to figure out what code you need to add to this file to make the story change when you press on the choice buttons.
                     if(giveAlert())
                     {
                       if(storyBrain.storynumber==9){
@@ -162,7 +152,6 @@ class _PrioritisationState extends State<Prioritisation> {
                             DialogButton(
                               child: Text(
                                 "Click here!",
-
                                 style: TextStyle(color: Colors.white, fontSize: 20),
                               ),
                               width: 120,
@@ -171,12 +160,10 @@ class _PrioritisationState extends State<Prioritisation> {
                                 storyBrain.restart();
                                 Navigator.pop(context);
                               },
-
                             )
                           ],
                         ).show();
                       }
-
                       if(storyBrain.storynumber==10){
                         Alert(
                           context: context,
@@ -187,7 +174,6 @@ class _PrioritisationState extends State<Prioritisation> {
                             DialogButton(
                               child: Text(
                                 "Call",
-
                                 style: TextStyle(color: Colors.white, fontSize: 20),
                               ),
                               width: 120,
@@ -196,13 +182,10 @@ class _PrioritisationState extends State<Prioritisation> {
                                 storyBrain.restart();
                                 Navigator.pop(context);
                               },
-
-
                             )
                           ],
                         ).show();
                       }
-
                       if(storyBrain.storynumber==8){
                         Alert(
                           context: context,
@@ -213,7 +196,6 @@ class _PrioritisationState extends State<Prioritisation> {
                             DialogButton(
                               child: Text(
                                 "Call",
-
                                 style: TextStyle(color: Colors.white, fontSize: 20),
                               ),
                               width: 120,
@@ -222,14 +204,11 @@ class _PrioritisationState extends State<Prioritisation> {
                                 storyBrain.restart();
                                 Navigator.pop(context);
                               },
-
                             )
                           ],
                         ).show();
                       }
-
                     }
-
                     if(storyBrain.storynumber==7){
                       Alert(
                         context: context,
@@ -240,7 +219,6 @@ class _PrioritisationState extends State<Prioritisation> {
                           DialogButton(
                             child: Text(
                               "Call",
-
                               style: TextStyle(color: Colors.white, fontSize: 20),
                             ),
                             width: 120,
@@ -249,20 +227,16 @@ class _PrioritisationState extends State<Prioritisation> {
                               storyBrain.restart();
                               Navigator.pop(context);
                             },
-
                           )
                         ],
                       ).show();
                     }
-
-
                     setState(() {
                       storyBrain.nextStory(1);
                     });
                   },
                   color: Colors.green,
                   child: Text(
-                    //TODO: Step 13 - Use the storyBrain to get the text for choice 1.
                     storyBrain.getChoice1(),
                     style: TextStyle(
                         fontSize: 20.0,
@@ -276,21 +250,16 @@ class _PrioritisationState extends State<Prioritisation> {
               ),
               Expanded(
                 flex: 2,
-                //TODO: Step 26 - Use a Flutter Visibility Widget to wrap this FlatButton.
-                //TODO: Step 28 - Set the "visible" property of the Visibility Widget to equal the output from the buttonShouldBeVisible() method in the storyBrain.
                 child: Visibility(
                   visible: storyBrain.buttonShouldBeVisible(),
                   child: FlatButton(
                     onPressed: () {
-                      //Choice 2 made by user.
-                      //TODO: Step 19 - Call the nextStory() method from storyBrain and pass the number 2 as the choice made by the user.
-                      setState(() {
+                     setState(() {
                         storyBrain.nextStory(2);
                       });
                     },
                     color: Colors.orange,
                     child: Text(
-                      //TODO: Step 14 - Use the storyBrain to get the text for choice 2.
                       storyBrain.getChoice2(),
                       style: TextStyle(
                         fontSize: 20.0,
@@ -307,5 +276,3 @@ class _PrioritisationState extends State<Prioritisation> {
     );
   }
 }
-
-//TODO: Step 29 - Run the app and test it against the Story Outline to make sure you've completed all the steps. The code for the completed app can be found here: https://github.com/londonappbrewery/destini-challenge-completed/

@@ -1,30 +1,13 @@
-import 'dart:math';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:flash_chat/screens/chat_screen.dart';
 import 'package:flash_chat/screens/dashboard.dart';
 import 'package:flash_chat/screens/login_screen.dart';
-import 'package:flash_chat/screens/prioritizer_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flash_chat/constants.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/services.dart';
-import 'package:flash_chat/screens/prioritizer_screen.dart';
-import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:flash_chat/constants.dart';
-import 'package:geolocator/geolocator.dart';
-import 'package:flutter/services.dart';
-import 'package:edge_alert/edge_alert.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
-import 'package:flash_chat/components/bottom_button.dart';
-import 'package:flash_chat/components/round_icon_button.dart';
 import 'package:flash_chat/components/rounded_button.dart';
-import 'package:flash_chat/components/bottom_button.dart';
-import 'package:flash_chat/components/round_icon_button.dart';
-
 
 class HospitalUI extends StatefulWidget {
   static const String id = 'hui_screen';
@@ -38,45 +21,53 @@ class _HospitalUIState extends State<HospitalUI> {
   int ambInt;
   String beds ;
   String ambulance;
-  String hospital_name='';
-  String phone_number;
+  String hospitalName='';
+  //String phoneNumber;
   Position position;
   GeoPoint myLocation;
   String finalLocation;
+  final firestore = Firestore.instance;
+
 
   final auth = FirebaseAuth.instance;
 
-  void getLocation() async {
-    try {
-      position = await Geolocator().getLastKnownPosition(desiredAccuracy: LocationAccuracy.high);
-      myLocation = GeoPoint(position.latitude,position.longitude);
-      print(position);
-      String myLatitude = myLocation.latitude.toString();
-      String myLongitude = myLocation.longitude.toString();
-      finalLocation = myLatitude+","+myLongitude;
-      print(finalLocation);
-      EdgeAlert.show(context, title: 'Your location', description: '$position', gravity: EdgeAlert.BOTTOM);
-    }
-    on PlatformException catch(e){
-      if(e.code == 'PERMISSION_DISABLED'){
-        //error = 'Permission denied';
-        EdgeAlert.show(context, title: 'Your location', description: 'Please Switch on your location in phone', gravity: EdgeAlert.BOTTOM);
-
-      }
-      else{
-        print(position);
-        EdgeAlert.show(context, title: 'Your location', description: '$position', gravity: EdgeAlert.BOTTOM);
-      }
-
-    }
-
+  void sendDataToNextScreen(BuildContext context) {
+    String ambulances = ambulance;
+    String bed = beds;
+    String concat = ambulances+","+bed;
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => HospitalDashboard(ambulances: concat,),
+        ));
   }
+
+  void initialise() async {
+    final FirebaseUser user = await auth.currentUser();
+    final uid = user.uid;
+    firestore.collection('hospitals').document(uid)
+        // ignore: non_constant_identifier_names
+        .get().then((DocumentSnapshot) =>
+    ambulance = DocumentSnapshot.data['ambulances'].toString());
+
+    firestore.collection('hospitals').document(uid)
+        // ignore: non_constant_identifier_names
+        .get().then((DocumentSnapshot) =>
+    beds = DocumentSnapshot.data['beds'].toString());
+
+    firestore.collection('hospitals').document(uid)
+    // ignore: non_constant_identifier_names
+        .get().then((DocumentSnapshot) =>
+    hospitalName = DocumentSnapshot.data['name']);
+  }
+
 
   TextEditingController _controller;
 
   void initState() {
     super.initState();
     _controller = TextEditingController();
+    initialise();
   }
 
   void dispose() {
@@ -84,20 +75,6 @@ class _HospitalUIState extends State<HospitalUI> {
     super.dispose();
   }
 
-  void inputData() async {
-    final FirebaseUser user = await auth.currentUser();
-    final uid = user.uid;
-    _firestore.collection('hospitals').document(uid).setData({
-      'beds': bedInt,
-      'ambulances': ambInt,
-      'name': hospital_name,
-      'location': finalLocation,
-      'phone number': phone_number
-    });
-    _firestore.collection('hospitals');
-  }
-
-  final _firestore = Firestore.instance;
 
   @override
   Widget build(BuildContext context) {
@@ -149,49 +126,37 @@ class _HospitalUIState extends State<HospitalUI> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: <Widget>[
-                          Text('Welcome To Cmrs .',style: GoogleFonts.pacifico(
+                          Text('Welcome To Cmrs',style: GoogleFonts.pacifico(
                             textStyle: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 color: Colors.black
                             )
                           ),
-
                           ),
-
                           SizedBox(
                             height: 50,
                           ),
 
-                          Text('hospital_name', style: GoogleFonts.pacifico(
+                          Text(hospitalName, style: GoogleFonts.pacifico(
                             textStyle: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 color: Colors.black
-
                             ),
                           )
-
                           ),
                         ],
                       )
                     ),
-
-
-
-
-
-
-
-
-
                   ],
                 ),
               ),
             ),
             RoundedButton(
-              title: 'Update my beds and ambulances',
+              title: 'Go to Dashboard',
               colour: Colors.lightBlueAccent,
               onPressed: () {
-                Navigator.pushNamed(context, Hospital_Dashboard.id);
+                initialise();
+                sendDataToNextScreen(context);
               },
             ),
 
@@ -206,8 +171,6 @@ class _HospitalUIState extends State<HospitalUI> {
                 Navigator.popAndPushNamed(context, LoginScreen1.id);
               },
             ),
-
-
           ],
         ),
       ),
@@ -216,11 +179,8 @@ class _HospitalUIState extends State<HospitalUI> {
 }
 
 
-
-
 class ReusableCard extends StatelessWidget {
   ReusableCard({@required this.colour, this.cardChild, this.onPress});
-
   final Color colour;
   final Widget cardChild;
   final Function onPress;
