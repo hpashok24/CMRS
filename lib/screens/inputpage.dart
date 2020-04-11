@@ -123,7 +123,7 @@ class _InputPageState extends State<InputPage> {
                         style: TextStyle(
                           color: Colors.black,
                         ),
-                        decoration: kTextFieldInputDecoration,
+                        decoration: kTextFieldInputDecoration7,
                         onChanged: (value) {
                           patient = value;
                           print(value);

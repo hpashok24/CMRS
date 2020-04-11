@@ -145,44 +145,99 @@ class _PrioritisationState extends State<Prioritisation> {
               ),
               Expanded(
                 flex: 2,
-                child: FlatButton(
-                  onPressed: () {
-                    //Choice 1 made by user.
-                    //TODO: Step 18 - Call the nextStory() method from storyBrain and pass the number 1 as the choice made by the user.
-                    //TODO: Step 24 - Run the app and try to figure out what code you need to add to this file to make the story change when you press on the choice buttons.
-                    if(giveAlert())
-                    {
-                      if(storyBrain.storynumber==9){
-                        Alert(
-                          context: context,
-                          type: AlertType.error,
-                          title: "Patient in Immediate danger",
-                          desc: "Get CMRS the nearest hospital with ICU bed",
-                          buttons: [
-                            DialogButton(
-                              child: Text(
-                                "Click here!",
+                child: Visibility(
+                  visible: storyBrain.buttonShouldBeVisible1(),
+                  child: FlatButton(
+                    onPressed: () {
+                      //Choice 1 made by user.
+                      //TODO: Step 18 - Call the nextStory() method from storyBrain and pass the number 1 as the choice made by the user.
+                      //TODO: Step 24 - Run the app and try to figure out what code you need to add to this file to make the story change when you press on the choice buttons.
+                      if(giveAlert())
+                      {
+                        if(storyBrain.storynumber==9){
+                          Alert(
+                            context: context,
+                            type: AlertType.error,
+                            title: "Patient in Immediate danger",
+                            desc: "Get CMRS the nearest hospital with ICU bed",
+                            buttons: [
+                              DialogButton(
+                                child: Text(
+                                  "Click here!",
 
-                                style: TextStyle(color: Colors.white, fontSize: 20),
-                              ),
-                              width: 120,
-                              onPressed: () {
-                                getLocationOfNearestHospital();
-                                storyBrain.restart();
-                                Navigator.pop(context);
-                              },
+                                  style: TextStyle(color: Colors.white, fontSize: 20),
+                                ),
+                                width: 120,
+                                onPressed: () {
+                                  getLocationOfNearestHospital();
+                                  storyBrain.restart();
+                                  Navigator.pop(context);
+                                },
 
-                            )
-                          ],
-                        ).show();
+                              )
+                            ],
+                          ).show();
+                        }
+
+                        if(storyBrain.storynumber==10){
+                          Alert(
+                            context: context,
+                            type: AlertType.error,
+                            title: "Patient is not critical call a regular ambulance",
+                            desc: "Call 108",
+                            buttons: [
+                              DialogButton(
+                                child: Text(
+                                  "Call",
+
+                                  style: TextStyle(color: Colors.white, fontSize: 20),
+                                ),
+                                width: 120,
+                                onPressed: () {
+                                  _launchCaller(number);
+                                  storyBrain.restart();
+                                  Navigator.pop(context);
+                                },
+
+
+                              )
+                            ],
+                          ).show();
+                        }
+
+                        if(storyBrain.storynumber==8){
+                          Alert(
+                            context: context,
+                            type: AlertType.error,
+                            title: "Mortuary Van",
+                            desc: "Call St Peters Undertaker service",
+                            buttons: [
+                              DialogButton(
+                                child: Text(
+                                  "Call",
+
+                                  style: TextStyle(color: Colors.white, fontSize: 20),
+                                ),
+                                width: 120,
+                                onPressed: () {
+                                  _launchCaller(mnumber);
+                                  storyBrain.restart();
+                                  Navigator.pop(context);
+                                },
+
+                              )
+                            ],
+                          ).show();
+                        }
+
                       }
 
-                      if(storyBrain.storynumber==10){
+                      if(storyBrain.storynumber==7){
                         Alert(
                           context: context,
                           type: AlertType.error,
                           title: "Patient is not critical call a regular ambulance",
-                          desc: "Call 108",
+                          desc: "Call ",
                           buttons: [
                             DialogButton(
                               child: Text(
@@ -197,76 +252,24 @@ class _PrioritisationState extends State<Prioritisation> {
                                 Navigator.pop(context);
                               },
 
-
                             )
                           ],
                         ).show();
                       }
 
-                      if(storyBrain.storynumber==8){
-                        Alert(
-                          context: context,
-                          type: AlertType.error,
-                          title: "Mortuary Van",
-                          desc: "Call St Peters Undertaker service",
-                          buttons: [
-                            DialogButton(
-                              child: Text(
-                                "Call",
 
-                                style: TextStyle(color: Colors.white, fontSize: 20),
-                              ),
-                              width: 120,
-                              onPressed: () {
-                                _launchCaller(mnumber);
-                                storyBrain.restart();
-                                Navigator.pop(context);
-                              },
-
-                            )
-                          ],
-                        ).show();
-                      }
-
-                    }
-
-                    if(storyBrain.storynumber==7){
-                      Alert(
-                        context: context,
-                        type: AlertType.error,
-                        title: "Patient is not critical call a regular ambulance",
-                        desc: "Call ",
-                        buttons: [
-                          DialogButton(
-                            child: Text(
-                              "Call",
-
-                              style: TextStyle(color: Colors.white, fontSize: 20),
-                            ),
-                            width: 120,
-                            onPressed: () {
-                              _launchCaller(number);
-                              storyBrain.restart();
-                              Navigator.pop(context);
-                            },
-
-                          )
-                        ],
-                      ).show();
-                    }
-
-
-                    setState(() {
-                      storyBrain.nextStory(1);
-                    });
-                  },
-                  color: Colors.green,
-                  child: Text(
-                    //TODO: Step 13 - Use the storyBrain to get the text for choice 1.
-                    storyBrain.getChoice1(),
-                    style: TextStyle(
-                        fontSize: 20.0,
-                        fontWeight: FontWeight.bold
+                      setState(() {
+                        storyBrain.nextStory(1);
+                      });
+                    },
+                    color: Colors.green,
+                    child: Text(
+                      //TODO: Step 13 - Use the storyBrain to get the text for choice 1.
+                      storyBrain.getChoice1(),
+                      style: TextStyle(
+                          fontSize: 20.0,
+                          fontWeight: FontWeight.bold
+                      ),
                     ),
                   ),
                 ),
@@ -283,14 +286,56 @@ class _PrioritisationState extends State<Prioritisation> {
                   child: FlatButton(
                     onPressed: () {
                       //Choice 2 made by user.
-                      //TODO: Step 19 - Call the nextStory() method from storyBrain and pass the number 2 as the choice made by the user.
+                  if(giveAlert()) {
+                    if (storyBrain.storynumber == 9) {
+                      Alert(
+                        context: context,
+                        type: AlertType.error,
+                        title: "Patient in Immediate danger",
+                        desc: "Get CMRS the nearest hospital with ICU bed",
+                        buttons: [
+                          DialogButton(
+                            child: Text(
+                              "Call hospital",
+
+                              style: TextStyle(
+                                  color: Colors.white, fontSize: 20),
+                            ),
+                            width: 120,
+                            onPressed: () {
+                              getLocationOfNearestHospital();
+                              storyBrain.restart();
+                              Navigator.pop(context);
+                            },
+
+                          ),
+                          DialogButton(
+                            child: Text(
+                              " hospital route ",
+
+                              style: TextStyle(
+                                  color: Colors.white, fontSize: 20),
+                            ),
+                            width: 120,
+                            onPressed: () {
+                              storyBrain.restart();
+                              getLocationOfNearestHospital();
+                              Navigator.pop(context);
+                            },
+
+                          )
+                        ],
+                      ).show();
+                    }
+                  }
+
                       setState(() {
                         storyBrain.nextStory(2);
                       });
                     },
-                    color: Colors.orange,
+                    color: Colors.redAccent,
                     child: Text(
-                      //TODO: Step 14 - Use the storyBrain to get the text for choice 2.
+
                       storyBrain.getChoice2(),
                       style: TextStyle(
                         fontSize: 20.0,
@@ -308,4 +353,3 @@ class _PrioritisationState extends State<Prioritisation> {
   }
 }
 
-//TODO: Step 29 - Run the app and test it against the Story Outline to make sure you've completed all the steps. The code for the completed app can be found here: https://github.com/londonappbrewery/destini-challenge-completed/

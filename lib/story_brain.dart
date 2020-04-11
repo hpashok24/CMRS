@@ -1,5 +1,5 @@
 import 'story.dart';
-
+import 'package:flutter/material.dart';
 
 class StoryBrain {
 
@@ -13,43 +13,43 @@ class StoryBrain {
         choice2: 'Doesn\'t walk' ),
     //1
     Story(
-        storyTitle: 'Patient\'s respiration ?'
+        storyTitle: 'Patient\'s respiration ? \n \n (Go near the nose and see if air is felt or place hand over abdomen and look for movement of hand)'
             ,
         choice1: 'Present ',
         choice2: 'Absent'),
     //2
     Story(
         storyTitle:
-        'Is Position airway present ? ',
+        'Is Position airway present ? \n\n(What I know if patient is breathing,  airway is good if not tilt forehead slightly back and push chin up and see if breathing is present)',
         choice1: 'Yes',
         choice2: 'No'),
     //3
     Story(
         storyTitle:
-        'What is the Respiration Rpm ? ',
+        'What is the Respiration Rpm ? \n \n (No. of times the hand over abdomen moves in 1 min)',
         choice1: 'less than 30 rpm',
         choice2: 'more than 30 rpm'),
     //4
     Story(
-        storyTitle:'Radial pulse ',
+        storyTitle:'Radial pulse \n\n (Radial pulse is 3 fingers placed on the wrist in line with the thumb of that wrist and feeling for pulsations for 1 min) ',
         choice1: 'Present ',
         choice2: 'Absent '),
     //5
     Story(
         storyTitle:
-        'Blanch test',
+        'Blanch test \n \n (press the tip of index finger until that region appears white and lift the finger and look for return of pinkish colouration, less than 2 sec is normal)',
         choice1: 'less than 2 seconds',
         choice2: 'more than 2 seconds'),
     //6
     Story(
         storyTitle:
-        'Does he follow instructions ',
+        'Does he follow instructions \n\n (If he can respond to commands of what is your or can you talk) ',
         choice1: 'yes ',
         choice2: 'no'),
     //7
     Story(
         storyTitle:
-        'Seems like it\'s not critical' ,
+        'Seems like it\'s Minor' ,
         choice1: 'What to do next?',
         choice2: ''),
     //8
@@ -62,8 +62,8 @@ class StoryBrain {
     Story(
         storyTitle:
         'Immediate',
-        choice1: 'Get ambulance Immedaiately',
-        choice2: ''),
+        choice1: 'Get ambulance Immediately',
+        choice2: 'Get ambulance Immediately'),
     //10
     Story(
         storyTitle:
@@ -172,10 +172,19 @@ class StoryBrain {
 
 //TODO: Step 27 - Create a method called buttonShouldBeVisible() which checks to see if storyNumber is 0 or 1 or 2 (when both buttons should show choices) and return true if that is the case, else it should return false.
   bool buttonShouldBeVisible() {
-    if (storynumber == 7 || storynumber == 8 || storynumber == 9 || storynumber == 10 ) {
+    if (storynumber == 7 || storynumber == 8 || storynumber == 10 ) {
       return false;
     } else {
       return true;
     }
   }
+
+  bool buttonShouldBeVisible1() {
+    if ( storynumber == 9  ) {
+      return false;
+    } else {
+      return true;
+    }
+  }
+
 }
