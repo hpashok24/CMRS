@@ -22,7 +22,6 @@ class GoogleMaps {
   }
 }
 
-//TODO: Step 9 - Create a new storyBrain object from the StoryBrain class.
 StoryBrain storyBrain = StoryBrain();
 
 
@@ -41,6 +40,7 @@ class _PrioritisationState extends State<Prioritisation> {
   getHospitalLocations(int n) async {
     return await Firestore.instance.collection('hospitals').where('beds', isGreaterThan: n).getDocuments();
   }
+  
   int number=108;
   int mnumber= 09844088147;
 
@@ -72,9 +72,11 @@ class _PrioritisationState extends State<Prioritisation> {
   QuerySnapshot querySnapshot;
   List<String> locations = [];
   List<double> distances = [];
+  List<String> phoneNumbers = [];
   GeoPoint minDistanceLocation ;
+  int phoneNumber ;
 
-  void getLocationOfNearestHospital() async {
+  void getLocationOfNearestHospital(int n) async {
     try {
       position = await Geolocator().getLastKnownPosition(
           desiredAccuracy: LocationAccuracy.high);
@@ -83,7 +85,10 @@ class _PrioritisationState extends State<Prioritisation> {
       EdgeAlert.show(context, title: 'Your location', description: '$position', gravity: EdgeAlert.BOTTOM);
 
       for (int i = 0; i < querySnapshot.documents.length; i++) {
-        locations.add(querySnapshot.documents[i].data['location']);
+        if(querySnapshot.documents[i].data['ambulances']>0){
+          locations.add(querySnapshot.documents[i].data['location']);
+          phoneNumbers.add(querySnapshot.documents[i].data['phone number']);
+        }
       }
       print(locations.length);
       double min = await Geolocator().distanceBetween(myLocation.latitude, myLocation.longitude, double.parse(locations[0].split(",")[0]), double.parse(locations[0].split(",")[1]));
@@ -99,9 +104,19 @@ class _PrioritisationState extends State<Prioritisation> {
           minIndex = i;
         }
       }
+      print(minIndex);
       minDistanceLocation = GeoPoint(double.parse(locations[minIndex].split(",")[0]), double.parse(locations[minIndex].split(",")[1]));
-      GoogleMaps.openMap(minDistanceLocation.latitude,minDistanceLocation.longitude);
-    }
+      print(minDistanceLocation.latitude);
+      print(minDistanceLocation.longitude);
+      phoneNumber = int.parse(phoneNumbers[minIndex]);
+      print(phoneNumber);
+      if(n==1){
+       GoogleMaps.openMap(minDistanceLocation.latitude,minDistanceLocation.longitude);
+      }
+      else if(n==2) {
+        _launchCaller(phoneNumber);
+        }
+      }
     on PlatformException catch(e){
       if(e.code == 'PERMISSION_DISABLED'){
         //error = 'Permission denied';
@@ -128,228 +143,495 @@ class _PrioritisationState extends State<Prioritisation> {
         constraints: BoxConstraints.expand(),
         child: SafeArea(
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: <Widget>[
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: <Widget>[
               Expanded(
-                flex: 12,
-                child: Center(
-                  child: Text(
-                    //TODO: Step 10 - use the storyBrain to get the first story title and display it in this Text Widget.
-                    storyBrain.getStory(),
-                    style: TextStyle(
-                        fontSize: 25.0,
-                        fontWeight: FontWeight.bold
-                    ),
-                  ),
-                ),
-              ),
-              Expanded(
-                flex: 2,
-                child: Visibility(
-                  visible: storyBrain.buttonShouldBeVisible1(),
-                  child: FlatButton(
-                    onPressed: () {
-                      //Choice 1 made by user.
-                      //TODO: Step 18 - Call the nextStory() method from storyBrain and pass the number 1 as the choice made by the user.
-                      //TODO: Step 24 - Run the app and try to figure out what code you need to add to this file to make the story change when you press on the choice buttons.
-                      if(giveAlert())
-                      {
-                        if(storyBrain.storynumber==9){
-                          Alert(
-                            context: context,
-                            type: AlertType.error,
-                            title: "Patient in Immediate danger",
-                            desc: "Get CMRS the nearest hospital with ICU bed",
-                            buttons: [
-                              DialogButton(
-                                child: Text(
-                                  "Click here!",
-
-                                  style: TextStyle(color: Colors.white, fontSize: 20),
-                                ),
-                                width: 120,
-                                onPressed: () {
-                                  getLocationOfNearestHospital();
-                                  storyBrain.restart();
-                                  Navigator.pop(context);
-                                },
-
-                              )
-                            ],
-                          ).show();
-                        }
-
-                        if(storyBrain.storynumber==10){
-                          Alert(
-                            context: context,
-                            type: AlertType.error,
-                            title: "Patient is not critical call a regular ambulance",
-                            desc: "Call 108",
-                            buttons: [
-                              DialogButton(
-                                child: Text(
-                                  "Call",
-
-                                  style: TextStyle(color: Colors.white, fontSize: 20),
-                                ),
-                                width: 120,
-                                onPressed: () {
-                                  _launchCaller(number);
-                                  storyBrain.restart();
-                                  Navigator.pop(context);
-                                },
+                  flex: 12,
+                  child: Center(
+    child: Text(
+    //TODO: Step 10 - use the storyBrain to get the first story title and display it in this Text Widget.
+    storyBrain.getStory(),
+    style: TextStyle(
+    fontSize: 25.0,
+    fontWeight: FontWeight.bold
+    ),
+    ),
+    ),
+    ),
 
 
-                              )
-                            ],
-                          ).show();
-                        }
 
-                        if(storyBrain.storynumber==8){
-                          Alert(
-                            context: context,
-                            type: AlertType.error,
-                            title: "Mortuary Van",
-                            desc: "Call St Peters Undertaker service",
-                            buttons: [
-                              DialogButton(
-                                child: Text(
-                                  "Call",
+    Expanded(
+    flex: 2,
+    child: Visibility(
+    visible: storyBrain.buttonShouldBeVisible1(),
+    child: FlatButton(
+    onPressed: () {
+    if(giveAlert())
+    {
+    if(storyBrain.storynumber==9){
+    Alert(
+    context: context,
+    type: AlertType.error,
+    title: "Patient in Immediate danger",
+    desc: "Get CMRS the nearest hospital with ICU bed",
+    buttons: [
+    DialogButton(
+    child: Text(
+    "Click here!",
 
-                                  style: TextStyle(color: Colors.white, fontSize: 20),
-                                ),
-                                width: 120,
-                                onPressed: () {
-                                  _launchCaller(mnumber);
-                                  storyBrain.restart();
-                                  Navigator.pop(context);
-                                },
+    style: TextStyle(color: Colors.white, fontSize: 20),
+    ),
+    width: 120,
+    onPressed: () {
+    getLocationOfNearestHospital(1);
+    storyBrain.restart();
+    Navigator.pop(context);
+    },
 
-                              )
-                            ],
-                          ).show();
-                        }
-
-                      }
-
-                      if(storyBrain.storynumber==7){
-                        Alert(
-                          context: context,
-                          type: AlertType.error,
-                          title: "Patient is not critical call a regular ambulance",
-                          desc: "Call ",
-                          buttons: [
-                            DialogButton(
-                              child: Text(
-                                "Call",
-
-                                style: TextStyle(color: Colors.white, fontSize: 20),
-                              ),
-                              width: 120,
-                              onPressed: () {
-                                _launchCaller(number);
-                                storyBrain.restart();
-                                Navigator.pop(context);
-                              },
-
-                            )
-                          ],
-                        ).show();
-                      }
+    )
+    ],
+    ).show();
+    }
 
 
-                      setState(() {
-                        storyBrain.nextStory(1);
-                      });
-                    },
-                    color: Colors.green,
-                    child: Text(
-                      //TODO: Step 13 - Use the storyBrain to get the text for choice 1.
-                      storyBrain.getChoice1(),
-                      style: TextStyle(
-                          fontSize: 20.0,
-                          fontWeight: FontWeight.bold
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: 20.0,
-              ),
-              Expanded(
-                flex: 2,
-                //TODO: Step 26 - Use a Flutter Visibility Widget to wrap this FlatButton.
-                //TODO: Step 28 - Set the "visible" property of the Visibility Widget to equal the output from the buttonShouldBeVisible() method in the storyBrain.
-                child: Visibility(
-                  visible: storyBrain.buttonShouldBeVisible(),
-                  child: FlatButton(
-                    onPressed: () {
-                      //Choice 2 made by user.
-                  if(giveAlert()) {
-                    if (storyBrain.storynumber == 9) {
-                      Alert(
-                        context: context,
-                        type: AlertType.error,
-                        title: "Patient in Immediate danger",
-                        desc: "Get CMRS the nearest hospital with ICU bed",
-                        buttons: [
-                          DialogButton(
-                            child: Text(
-                              "Call hospital",
 
-                              style: TextStyle(
-                                  color: Colors.white, fontSize: 20),
-                            ),
-                            width: 120,
-                            onPressed: () {
-                              getLocationOfNearestHospital();
-                              storyBrain.restart();
-                              Navigator.pop(context);
-                            },
 
-                          ),
-                          DialogButton(
-                            child: Text(
-                              "hospital route ",
 
-                              style: TextStyle(
-                                  color: Colors.white, fontSize: 20),
-                            ),
-                            width: 120,
-                            onPressed: () {
-                              getLocationOfNearestHospital();
-                              storyBrain.restart();
-                              Navigator.pop(context);
-                            },
+    }
 
-                          )
-                        ],
-                      ).show();
-                    }
-                  }
+    if(storyBrain.storynumber==7){
+    Alert(
+    context: context,
+    type: AlertType.error,
+    title: "Patient is not critical call a regular ambulance",
+    desc: "Call ",
+    buttons: [
+    DialogButton(
+    child: Text(
+    "Call",
 
-                      setState(() {
-                        storyBrain.nextStory(2);
-                      });
-                    },
-                    color: Colors.redAccent,
-                    child: Text(
+    style: TextStyle(color: Colors.white, fontSize: 20),
+    ),
+    width: 120,
+    onPressed: () {
+    _launchCaller(number);
+    storyBrain.restart();
+    Navigator.pop(context);
+    },
 
-                      storyBrain.getChoice2(),
-                      style: TextStyle(
-                        fontSize: 20.0,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
+    )
+    ],
+    ).show();
+    }
+
+
+    setState(() {
+    storyBrain.nextStory(1);
+    });
+    },
+    color: Colors.green,
+    child: Text(
+    storyBrain.getChoice1(),
+    style: TextStyle(
+    fontSize: 20.0,
+    fontWeight: FontWeight.bold
+    ),
+    ),
+    ),
+    ),
+    ),//GREEN
+    SizedBox(
+    height: 20.0,
+    ),
+    Expanded(
+    flex: 2,
+
+    child: Visibility(
+    visible: storyBrain.buttonShouldBeVisible(),
+    child: FlatButton(
+    onPressed: () {
+    //Choice 2 made by user.
+    if(giveAlert()) {
+    if (storyBrain.storynumber == 9) {
+    Alert(
+    context: context,
+    type: AlertType.error,
+    title: "Patient in Immediate danger",
+    desc: "Get CMRS the nearest hospital with ICU bed",
+    buttons: [
+    DialogButton(
+    child: Text(
+    "Call hospital",
+
+    style: TextStyle(
+    color: Colors.white, fontSize: 20),
+    ),
+    width: 120,
+    onPressed: () {
+    getLocationOfNearestHospital(2);
+    storyBrain.restart();
+    Navigator.pop(context);
+    },
+
+    ),
+    DialogButton(
+    child: Text(
+    "hospital route ",
+
+    style: TextStyle(
+    color: Colors.white, fontSize: 20),
+    ),
+    width: 120,
+    onPressed: () {
+    getLocationOfNearestHospital(1);
+    storyBrain.restart();
+    Navigator.pop(context);
+    },
+
+    )
+    ],
+    ).show();
+    }
+    }
+
+    setState(() {
+    storyBrain.nextStory(2);
+    });
+    },
+    color: Colors.redAccent,
+    child: Text(
+
+    storyBrain.getChoice2(),
+    style: TextStyle(
+    fontSize: 20.0,
+    fontWeight: FontWeight.bold,
+    ),
+    ),
+    ),
+    ),
+    ),//RED
+    SizedBox(
+    height: 10.0,
+    ),
+    Expanded(
+    flex: 2,
+    child: Visibility(
+    visible: storyBrain.buttonShouldBeVisible2(),
+    child: FlatButton(
+    onPressed: () {
+    //Choice 2 made by user.
+    if(giveAlert()) {
+    if (storyBrain.storynumber == 10) {
+    Alert(
+    context: context,
+    type: AlertType.error,
+    title: "Patient is not critical",
+    desc: "call normal ambulance",
+    buttons: [
+    DialogButton(
+    child: Text(
+    "Call hospital",
+
+    style: TextStyle(
+    color: Colors.white, fontSize: 20),
+    ),
+    width: 120,
+    onPressed: () {
+    _launchCaller(number);
+    storyBrain.restart();
+    Navigator.pop(context);
+    },
+
+    ),
+
+    ],
+    ).show();
+    }
+    }
+
+    setState(() {
+    storyBrain.nextStory(2);
+    });
+    },
+    color: Colors.yellowAccent,
+    child: Text(
+
+    "What to do now?",
+    style: TextStyle(
+    fontSize: 20.0,
+    fontWeight: FontWeight.bold,
+    ),
+    ),
+    ),
+    ),
+    ),//YELLOW
+    SizedBox(
+    height: 10.0,
+    ),
+    Expanded(
+    flex: 2,
+
+    child: Visibility(
+    visible: storyBrain.buttonShouldBeVisible3(),
+    child: FlatButton(
+    onPressed: () {
+    //Choice 2 made by user.
+    if(giveAlert()) {
+    if(storyBrain.storynumber==8){
+    Alert(
+    context: context,
+    type: AlertType.error,
+    title: "Mortuary Van",
+    desc: "Call St Peters Undertaker service",
+    buttons: [
+    DialogButton(
+    child: Text(
+    "Call",
+
+    style: TextStyle(color: Colors.white, fontSize: 20),
+    ),
+    width: 120,
+    onPressed: () {
+    _launchCaller(mnumber);
+    storyBrain.restart();
+    Navigator.pop(context);
+    },
+
+    )
+    ],
+    ).show();
+    }
+    }
+
+    setState(() {
+    storyBrain.nextStory(2);
+    });
+    },
+    color: Colors.grey,
+    child: Text(
+
+    "What to do now?",
+    style: TextStyle(
+    fontSize: 20.0,
+    fontWeight: FontWeight.bold,
+    ),
+    ),
+    ),
+    ),
+    ),// GREY
+    ],
+    )
       ),
-    );
+    ));
   }
 }
 
+/*
+Expanded(
+flex: 12,
+child: Center(
+child: Text(
+storyBrain.getStory(),
+style: TextStyle(
+fontSize: 25.0,
+fontWeight: FontWeight.bold
+),
+),
+),
+),
+Expanded(
+flex: 2,
+child: Visibility(
+visible: storyBrain.buttonShouldBeVisible1(),
+child: FlatButton(
+onPressed: () {
+if(giveAlert())
+{
+if(storyBrain.storynumber==9){
+Alert(
+context: context,
+type: AlertType.error,
+title: "Patient in Immediate danger",
+desc: "Get CMRS to the nearest hospital with ICU beds",
+buttons: [
+DialogButton(
+child: Text(
+"Click here!",
+
+style: TextStyle(color: Colors.white, fontSize: 20),
+),
+width: 120,
+onPressed: () {
+getLocationOfNearestHospital(1);
+storyBrain.restart();
+Navigator.pop(context);
+},
+
+)
+],
+).show();
+}
+
+if(storyBrain.storynumber==10){
+Alert(
+context: context,
+type: AlertType.error,
+title: "Patient is not critical call a regular ambulance",
+desc: "Call 108",
+buttons: [
+DialogButton(
+child: Text(
+"Call",
+
+style: TextStyle(color: Colors.white, fontSize: 20),
+),
+width: 120,
+onPressed: () {
+_launchCaller(number);
+storyBrain.restart();
+Navigator.pop(context);
+},
+
+
+)
+],
+).show();
+}
+
+if(storyBrain.storynumber==8){
+Alert(
+context: context,
+type: AlertType.error,
+title: "Mortuary Van",
+desc: "Call St Peters Undertaker service",
+buttons: [
+DialogButton(
+child: Text(
+"Call",
+
+style: TextStyle(color: Colors.white, fontSize: 20),
+),
+width: 120,
+onPressed: () {
+_launchCaller(mnumber);
+storyBrain.restart();
+Navigator.pop(context);
+},
+
+)
+],
+).show();
+}
+
+}
+
+if(storyBrain.storynumber==7){
+storyBrain.restart();
+Alert(
+context: context,
+type: AlertType.error,
+title: "Patient is not critical call a regular ambulance",
+desc: "Call ",
+buttons: [
+DialogButton(
+child: Text(
+"Call",
+
+style: TextStyle(color: Colors.white, fontSize: 20),
+),
+width: 120,
+onPressed: () {
+storyBrain.restart();
+_launchCaller(number);
+},
+)
+],
+).show();
+}
+setState(() {
+storyBrain.nextStory(1);
+});
+},
+color: Colors.green,
+child: Text(
+storyBrain.getChoice1(),
+style: TextStyle(
+fontSize: 20.0,
+fontWeight: FontWeight.bold
+),
+),
+),
+),
+),
+SizedBox(
+height: 20.0,
+),
+Expanded(
+flex: 2,
+child: Visibility(
+visible: storyBrain.buttonShouldBeVisible(),
+child: FlatButton(
+onPressed: () {
+//Choice 2 made by user.
+if(giveAlert()) {
+if (storyBrain.storynumber == 9) {
+Alert(
+context: context,
+type: AlertType.error,
+title: "Patient in Immediate danger",
+desc: "Get CMRS the nearest hospital with ICU bed",
+buttons: [
+DialogButton(
+child: Text(
+"Call hospital",
+
+style: TextStyle(
+color: Colors.white, fontSize: 20),
+),
+width: 120,
+onPressed: () {
+getLocationOfNearestHospital(2);
+storyBrain.restart();
+},
+
+),
+DialogButton(
+child: Text(
+"Hospital Route ",
+
+style: TextStyle(
+color: Colors.white, fontSize: 20),
+),
+width: 120,
+onPressed: () {
+getLocationOfNearestHospital(1);
+storyBrain.restart();
+},
+
+)
+],
+).show();
+}
+}
+
+setState(() {
+storyBrain.nextStory(2);
+});
+},
+color: Colors.redAccent,
+child: Text(
+
+storyBrain.getChoice2(),
+style: TextStyle(
+fontSize: 20.0,
+fontWeight: FontWeight.bold,
+),
+),
+),
+),
+),
+],
+),
+
+ */
