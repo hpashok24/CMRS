@@ -170,7 +170,6 @@ class StoryBrain {
 
 //TODO: Step 20 - Download the story plan here: https://drive.google.com/uc?export=download&id=1KU6EghkO9Hf2hRM0756xFHgNaZyGCou3
 
-//TODO: Step 27 - Create a method called buttonShouldBeVisible() which checks to see if storyNumber is 0 or 1 or 2 (when both buttons should show choices) and return true if that is the case, else it should return false.
   bool buttonShouldBeVisible() {
     if (storynumber == 7 ||storynumber == 8||storynumber == 10 ) {
       return false;
@@ -204,5 +203,3 @@ class StoryBrain {
   }
 
 }
-
-

@@ -10,6 +10,7 @@ import 'package:flutter/services.dart';
 import 'package:edge_alert/edge_alert.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 
 class GoogleMaps {
 
@@ -70,7 +71,7 @@ class _UserOptionsState extends State<UserOptions>
     });
   }
 
-  void getLocation() async {
+  void getLocationOfNearestHospital() async {
     try {
       position = await Geolocator().getLastKnownPosition(
           desiredAccuracy: LocationAccuracy.high);
@@ -107,6 +108,56 @@ class _UserOptionsState extends State<UserOptions>
         EdgeAlert.show(context, title: 'Your location', description: '$position', gravity: EdgeAlert.BOTTOM);
       }
     }
+  }
+
+  String descr = "";
+  void getNameOfNearestHospital() async {
+      position = await Geolocator().getLastKnownPosition(
+          desiredAccuracy: LocationAccuracy.high);
+      myLocation = GeoPoint(position.latitude, position.longitude);
+      print(position);
+      EdgeAlert.show(context, title: 'Your location', description: '$position', gravity: EdgeAlert.BOTTOM);
+      for (int i = 0; i < querySnapshot.documents.length; i++) {
+        locations.add(querySnapshot.documents[i].data['location']);
+      }
+      print(locations.length);
+      double min = await Geolocator().distanceBetween(myLocation.latitude, myLocation.longitude, double.parse(locations[0].split(",")[0]), double.parse(locations[0].split(",")[1]));
+      int minIndex = 0;
+      for (int i = 1; i < locations.length; i++) {
+        final double endLatitude = double.parse(locations[i].split(",")[0]);
+        final double endLongitude = double.parse(locations[i].split(",")[1]);
+        double myDistances = await Geolocator().distanceBetween(
+            myLocation.latitude, myLocation.longitude, endLatitude,
+            endLongitude);
+        if(myDistances<min){
+          min = myDistances;
+          minIndex = i;
+        }
+      }
+      minDistanceLocation = GeoPoint(double.parse(locations[minIndex].split(",")[0]), double.parse(locations[minIndex].split(",")[1]));
+      String minDistance = minDistanceLocation.latitude.toString()+","+minDistanceLocation.longitude.toString();
+      QuerySnapshot name = await Firestore.instance.collection('hospitals').where('location', isEqualTo: minDistance).getDocuments();
+      descr = name.documents[0].data['name'];
+      //return (name.documents[0].data['name']);
+      Alert(
+        context: context,
+        type: AlertType.success,
+        title: "The nearest hopital is $descr",
+        buttons: [
+          DialogButton(
+            child: Text(
+              "Hospital Route",
+
+              style: TextStyle(
+                  color: Colors.white, fontSize: 15),
+            ),
+            width: 120,
+            onPressed: () {
+              getLocationOfNearestHospital();
+            },
+          ),
+        ],
+      ).show();
   }
 
   @override
@@ -159,9 +210,7 @@ class _UserOptionsState extends State<UserOptions>
               title: 'Get nearest hospital (self ambulance)',
               colour: Colors.blueAccent,
               onPressed: () {
-               getLocation();
-                //calculateDistance();
-                //Navigator.pushNamed(context, MainRegistration.id);
+                getNameOfNearestHospital();
               },
             ),
             SizedBox(
