@@ -311,15 +311,15 @@ class _PrioritisationState extends State<Prioritisation> {
                           ),
                           DialogButton(
                             child: Text(
-                              " hospital route ",
+                              "hospital route ",
 
                               style: TextStyle(
                                   color: Colors.white, fontSize: 20),
                             ),
                             width: 120,
                             onPressed: () {
-                              storyBrain.restart();
                               getLocationOfNearestHospital();
+                              storyBrain.restart();
                               Navigator.pop(context);
                             },
 

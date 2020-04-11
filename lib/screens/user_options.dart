@@ -24,7 +24,6 @@ class GoogleMaps {
   }
 }
 
-
 class UserOptions extends StatefulWidget {
   static const String id = 'user_options_screen';
 
@@ -34,12 +33,15 @@ class UserOptions extends StatefulWidget {
 
 class _UserOptionsState extends State<UserOptions>
     with SingleTickerProviderStateMixin {
+
   AnimationController controller;
   Animation animation;
-
-
   Position position;
   GeoPoint myLocation = GeoPoint(56,-122);
+  QuerySnapshot querySnapshot;
+  List<String> locations = [];
+  GeoPoint minDistanceLocation ;
+
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
 
   _signOut() async {
@@ -54,7 +56,6 @@ class _UserOptionsState extends State<UserOptions>
   @override
   void initState() {
     super.initState();
-
     controller = AnimationController(duration: Duration(seconds: 1), vsync: this);
     animation = ColorTween(begin: Colors.blueGrey, end: Colors.white).animate(controller);
     controller.forward();
@@ -68,11 +69,6 @@ class _UserOptionsState extends State<UserOptions>
       });
     });
   }
-
-  QuerySnapshot querySnapshot;
-  List<String> locations = [];
-  GeoPoint minDistanceLocation ;
-
 
   void getLocation() async {
     try {
@@ -121,8 +117,6 @@ class _UserOptionsState extends State<UserOptions>
 
     @override
   Widget build(BuildContext context) {
-
-   // Future<GeoPoint> mylocation;
     return Scaffold(
       backgroundColor: animation.value,
       body: Padding(
@@ -170,28 +164,23 @@ class _UserOptionsState extends State<UserOptions>
                 //Navigator.pushNamed(context, MainRegistration.id);
               },
             ),
-
             SizedBox(
               height: 50,
             ),
-
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-
                 SizedBox(
                   width: 1,
                 ),
-
                FlatButton(
-                  color: Colors.red,
+                  color: Colors.teal,
                   textColor: Colors.white,
                   disabledColor: Colors.grey,
                   disabledTextColor: Colors.black,
                   padding: EdgeInsets.all(8.0),
                   splashColor: Colors.blueAccent,
-
                   onPressed: () {
                     _signOut();
                     Navigator.popAndPushNamed(context, LoginScreen1.id);

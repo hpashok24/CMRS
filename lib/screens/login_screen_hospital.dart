@@ -1,8 +1,5 @@
-import 'package:flash_chat/screens/dashboard.dart';
-import 'package:flash_chat/screens/hospital_details.dart';
-import 'package:flash_chat/screens/inputpage.dart';
+import 'package:flash_chat/screens/hospital_UI.dart';
 import 'package:flash_chat/screens/login_main.dart';
-import 'package:flash_chat/screens/welcome_screen.dart';
 import 'package:edge_alert/edge_alert.dart';
 import 'package:flutter/material.dart';
 import 'package:flash_chat/components/rounded_button.dart';
@@ -31,15 +28,15 @@ class _LoginScreenState2 extends State<LoginScreen2> {
     final FirebaseUser user = await _auth.currentUser();
     final uid = user.uid;
     _firestore.collection('hospitals').document(uid)
+        // ignore: non_constant_identifier_names
         .get().then((DocumentSnapshot) =>
     ambulances = DocumentSnapshot.data['ambulances'].toString());
 
     _firestore.collection('hospitals').document(uid)
+        // ignore: non_constant_identifier_names
         .get().then((DocumentSnapshot) =>
     beds = DocumentSnapshot.data['beds'].toString());
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -100,11 +97,8 @@ class _LoginScreenState2 extends State<LoginScreen2> {
                     final user = await _auth.signInWithEmailAndPassword(
                         email: email, password: password);
                     if (user != null) {
-                      //:Todo hospital dash board
-                      Navigator.pushNamed(context, Hospital_Dashboard.id);
-
+                      Navigator.pushNamed(context, HospitalUI.id);
                     }
-
                     setState(() {
                       showSpinner = false;
                     });
