@@ -172,7 +172,7 @@ class StoryBrain {
 
 //TODO: Step 27 - Create a method called buttonShouldBeVisible() which checks to see if storyNumber is 0 or 1 or 2 (when both buttons should show choices) and return true if that is the case, else it should return false.
   bool buttonShouldBeVisible() {
-    if (storynumber == 7 || storynumber == 8 || storynumber == 10 ) {
+    if (storynumber == 7 ||storynumber == 8||storynumber == 10 ) {
       return false;
     } else {
       return true;
@@ -180,11 +180,29 @@ class StoryBrain {
   }
 
   bool buttonShouldBeVisible1() {
-    if ( storynumber == 9  ) {
+    if ( storynumber == 9||storynumber == 8||storynumber == 10  ) {
       return false;
     } else {
       return true;
     }
   }
 
+  bool buttonShouldBeVisible2() {
+    if ( storynumber == 10 ) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  bool buttonShouldBeVisible3() {
+    if ( storynumber == 8 ) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
 }
+
+

@@ -143,6 +143,9 @@ class _PrioritisationState extends State<Prioritisation> {
                   ),
                 ),
               ),
+
+
+
               Expanded(
                 flex: 2,
                 child: Visibility(
@@ -179,56 +182,9 @@ class _PrioritisationState extends State<Prioritisation> {
                           ).show();
                         }
 
-                        if(storyBrain.storynumber==10){
-                          Alert(
-                            context: context,
-                            type: AlertType.error,
-                            title: "Patient is not critical call a regular ambulance",
-                            desc: "Call 108",
-                            buttons: [
-                              DialogButton(
-                                child: Text(
-                                  "Call",
-
-                                  style: TextStyle(color: Colors.white, fontSize: 20),
-                                ),
-                                width: 120,
-                                onPressed: () {
-                                  _launchCaller(number);
-                                  storyBrain.restart();
-                                  Navigator.pop(context);
-                                },
 
 
-                              )
-                            ],
-                          ).show();
-                        }
 
-                        if(storyBrain.storynumber==8){
-                          Alert(
-                            context: context,
-                            type: AlertType.error,
-                            title: "Mortuary Van",
-                            desc: "Call St Peters Undertaker service",
-                            buttons: [
-                              DialogButton(
-                                child: Text(
-                                  "Call",
-
-                                  style: TextStyle(color: Colors.white, fontSize: 20),
-                                ),
-                                width: 120,
-                                onPressed: () {
-                                  _launchCaller(mnumber);
-                                  storyBrain.restart();
-                                  Navigator.pop(context);
-                                },
-
-                              )
-                            ],
-                          ).show();
-                        }
 
                       }
 
@@ -273,7 +229,7 @@ class _PrioritisationState extends State<Prioritisation> {
                     ),
                   ),
                 ),
-              ),
+              ),//GREEN
               SizedBox(
                 height: 20.0,
               ),
@@ -344,7 +300,119 @@ class _PrioritisationState extends State<Prioritisation> {
                     ),
                   ),
                 ),
+              ),//RED
+              SizedBox(
+                height: 10.0,
               ),
+              Expanded(
+                flex: 2,
+                //TODO: Step 26 - Use a Flutter Visibility Widget to wrap this FlatButton.
+                //TODO: Step 28 - Set the "visible" property of the Visibility Widget to equal the output from the buttonShouldBeVisible() method in the storyBrain.
+                child: Visibility(
+                  visible: storyBrain.buttonShouldBeVisible2(),
+                  child: FlatButton(
+                    onPressed: () {
+                      //Choice 2 made by user.
+                      if(giveAlert()) {
+                        if (storyBrain.storynumber == 10) {
+                          Alert(
+                            context: context,
+                            type: AlertType.error,
+                            title: "Patient is not critical",
+                            desc: "call normal ambulance",
+                            buttons: [
+                              DialogButton(
+                                child: Text(
+                                  "Call hospital",
+
+                                  style: TextStyle(
+                                      color: Colors.white, fontSize: 20),
+                                ),
+                                width: 120,
+                                onPressed: () {
+                                  _launchCaller(number);
+                                  storyBrain.restart();
+                                  Navigator.pop(context);
+                                },
+
+                              ),
+
+                            ],
+                          ).show();
+                        }
+                      }
+
+                      setState(() {
+                        storyBrain.nextStory(2);
+                      });
+                    },
+                    color: Colors.yellowAccent,
+                    child: Text(
+
+                      "What to do now?",
+                      style: TextStyle(
+                        fontSize: 20.0,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ),
+              ),//YELLOW
+              SizedBox(
+                height: 10.0,
+              ),
+              Expanded(
+                flex: 2,
+                //TODO: Step 26 - Use a Flutter Visibility Widget to wrap this FlatButton.
+                //TODO: Step 28 - Set the "visible" property of the Visibility Widget to equal the output from the buttonShouldBeVisible() method in the storyBrain.
+                child: Visibility(
+                  visible: storyBrain.buttonShouldBeVisible3(),
+                  child: FlatButton(
+                    onPressed: () {
+                      //Choice 2 made by user.
+                      if(giveAlert()) {
+                        if(storyBrain.storynumber==8){
+                          Alert(
+                            context: context,
+                            type: AlertType.error,
+                            title: "Mortuary Van",
+                            desc: "Call St Peters Undertaker service",
+                            buttons: [
+                              DialogButton(
+                                child: Text(
+                                  "Call",
+
+                                  style: TextStyle(color: Colors.white, fontSize: 20),
+                                ),
+                                width: 120,
+                                onPressed: () {
+                                  _launchCaller(mnumber);
+                                  storyBrain.restart();
+                                  Navigator.pop(context);
+                                },
+
+                              )
+                            ],
+                          ).show();
+                        }
+                      }
+
+                      setState(() {
+                        storyBrain.nextStory(2);
+                      });
+                    },
+                    color: Colors.grey,
+                    child: Text(
+
+                      "What to do now?",
+                      style: TextStyle(
+                        fontSize: 20.0,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ),
+              ),// GREY
             ],
           ),
         ),
