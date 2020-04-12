@@ -1,3 +1,4 @@
+import 'package:flash_chat/screens/login_screen_hospital.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flash_chat/screens/dashboard.dart';
 import 'package:flash_chat/screens/login_screen.dart';
@@ -19,19 +20,38 @@ class _HospitalUIState extends State<HospitalUI> {
   String gender;
   int bedInt;
   int ambInt;
-  String beds ;
-  String ambulance;
+  String beds = "" ;
+  String ambulance = "";
   String hospitalName='';
-  //String phoneNumber;
   Position position;
   GeoPoint myLocation;
   String finalLocation;
   final firestore = Firestore.instance;
-
+  int flag  = 0;
 
   final auth = FirebaseAuth.instance;
 
   void sendDataToNextScreen(BuildContext context) {
+    initialise2();
+  }
+
+  void initialise2() async {
+    final FirebaseUser user = await auth.currentUser();
+    final uid = user.uid;
+    firestore.collection('hospitals').document(uid)
+    // ignore: non_constant_identifier_names
+        .get().then((DocumentSnapshot) =>
+    ambulance = DocumentSnapshot.data['ambulances'].toString());
+
+    firestore.collection('hospitals').document(uid)
+    // ignore: non_constant_identifier_names
+        .get().then((DocumentSnapshot) =>
+    beds = DocumentSnapshot.data['beds'].toString());
+
+    firestore.collection('hospitals').document(uid)
+    // ignore: non_constant_identifier_names
+        .get().then((DocumentSnapshot) =>
+    hospitalName = DocumentSnapshot.data['name']);
     String ambulances = ambulance;
     String bed = beds;
     String concat = ambulances+","+bed;
@@ -54,7 +74,8 @@ class _HospitalUIState extends State<HospitalUI> {
         // ignore: non_constant_identifier_names
         .get().then((DocumentSnapshot) =>
     beds = DocumentSnapshot.data['beds'].toString());
-
+    print(beds);
+    print(ambulance);
     firestore.collection('hospitals').document(uid)
     // ignore: non_constant_identifier_names
         .get().then((DocumentSnapshot) =>
@@ -66,8 +87,8 @@ class _HospitalUIState extends State<HospitalUI> {
 
   void initState() {
     super.initState();
-    _controller = TextEditingController();
-    initialise();
+    WidgetsBinding.instance
+        .addPostFrameCallback((_) => initialise());
   }
 
   void dispose() {
@@ -126,7 +147,7 @@ class _HospitalUIState extends State<HospitalUI> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: <Widget>[
-                          Text('Welcome To Cmrs',style: GoogleFonts.pacifico(
+                          Text('Welcome To CMRS',style: GoogleFonts.pacifico(
                             textStyle: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 color: Colors.black
@@ -140,6 +161,7 @@ class _HospitalUIState extends State<HospitalUI> {
                           Text(hospitalName, style: GoogleFonts.pacifico(
                             textStyle: TextStyle(
                                 fontWeight: FontWeight.bold,
+                                fontSize: 20,
                                 color: Colors.black
                             ),
                           )
@@ -155,9 +177,17 @@ class _HospitalUIState extends State<HospitalUI> {
               title: 'Go to Dashboard',
               colour: Colors.lightBlueAccent,
               onPressed: () {
-                initialise();
-                sendDataToNextScreen(context);
-              },
+                if(flag==0) {
+                  flag=1;
+                  initialise();
+                  sendDataToNextScreen(context);
+                 }
+                else{
+                  flag=0;
+                  initialise2();
+                  sendDataToNextScreen(context);
+                }
+                },
             ),
 
             SizedBox(
@@ -168,7 +198,7 @@ class _HospitalUIState extends State<HospitalUI> {
               title: 'Logout from CMRS',
               colour: Colors.lightBlueAccent,
               onPressed: () {
-                Navigator.popAndPushNamed(context, LoginScreen1.id);
+                Navigator.popAndPushNamed(context, LoginScreen2.id);
               },
             ),
           ],

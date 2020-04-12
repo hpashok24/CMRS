@@ -75,6 +75,7 @@ class _PrioritisationState extends State<Prioritisation> {
   List<String> phoneNumbers = [];
   GeoPoint minDistanceLocation ;
   int phoneNumber ;
+  String descr = "";
 
   void getLocationOfNearestHospital(int n) async {
     try {
@@ -129,6 +130,74 @@ class _PrioritisationState extends State<Prioritisation> {
     }
   }
 
+  void getNameOfNearestHospital() async {
+    position = await Geolocator().getLastKnownPosition(
+        desiredAccuracy: LocationAccuracy.high);
+    myLocation = GeoPoint(position.latitude, position.longitude);
+    print(position);
+    EdgeAlert.show(context, title: 'Your location', description: '$position', gravity: EdgeAlert.BOTTOM);
+    for (int i = 0; i < querySnapshot.documents.length; i++) {
+      locations.add(querySnapshot.documents[i].data['location']);
+    }
+    print(locations.length);
+    double min = await Geolocator().distanceBetween(myLocation.latitude, myLocation.longitude, double.parse(locations[0].split(",")[0]), double.parse(locations[0].split(",")[1]));
+    int minIndex = 0;
+    for (int i = 1; i < locations.length; i++) {
+      final double endLatitude = double.parse(locations[i].split(",")[0]);
+      final double endLongitude = double.parse(locations[i].split(",")[1]);
+      double myDistances = await Geolocator().distanceBetween(
+          myLocation.latitude, myLocation.longitude, endLatitude,
+          endLongitude);
+      if(myDistances<min){
+        min = myDistances;
+        minIndex = i;
+      }
+    }
+    minDistanceLocation = GeoPoint(double.parse(locations[minIndex].split(",")[0]), double.parse(locations[minIndex].split(",")[1]));
+    String minDistance = minDistanceLocation.latitude.toString()+","+minDistanceLocation.longitude.toString();
+    QuerySnapshot name = await Firestore.instance.collection('hospitals').where('location', isEqualTo: minDistance).getDocuments();
+    descr = name.documents[0].data['name'];
+    //return (name.documents[0].data['name']);
+    Alert(
+      context: context,
+      type: AlertType.error,
+      title: "Patient in Immediate danger",
+      desc: "The nearest hospital is $descr",
+      buttons: [
+        DialogButton(
+          child: Text(
+            "Call hospital",
+
+            style: TextStyle(
+                color: Colors.white, fontSize: 20),
+          ),
+          width: 120,
+          onPressed: () {
+            getLocationOfNearestHospital(2);
+            storyBrain.restart();
+            Navigator.pop(context);
+          },
+
+        ),
+        DialogButton(
+          child: Text(
+            "Hospital Route ",
+
+            style: TextStyle(
+                color: Colors.white, fontSize: 20),
+          ),
+          width: 120,
+          onPressed: () {
+            getLocationOfNearestHospital(1);
+            storyBrain.restart();
+            Navigator.pop(context);
+          },
+
+        )
+      ],
+    ).show();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -148,24 +217,23 @@ class _PrioritisationState extends State<Prioritisation> {
               Expanded(
                   flex: 12,
                   child: Center(
-    child: Text(
-    //TODO: Step 10 - use the storyBrain to get the first story title and display it in this Text Widget.
-    storyBrain.getStory(),
-    style: TextStyle(
-    fontSize: 25.0,
-    fontWeight: FontWeight.bold
-    ),
-    ),
-    ),
-    ),
+                    child: Text(
+                    storyBrain.getStory(),
+                    style: TextStyle(
+                            fontSize: 25.0,
+                            fontWeight: FontWeight.bold
+                          ),
+                  ),
+                ),
+              ),
 
 
 
-    Expanded(
-    flex: 2,
-    child: Visibility(
-    visible: storyBrain.buttonShouldBeVisible1(),
-    child: FlatButton(
+              Expanded(
+                flex: 2,
+                child: Visibility(
+                  visible: storyBrain.buttonShouldBeVisible1(),
+                     child: FlatButton(
     onPressed: () {
     if(giveAlert())
     {
@@ -200,7 +268,7 @@ class _PrioritisationState extends State<Prioritisation> {
 
     }
 
-    if(storyBrain.storynumber==7){
+                      if(storyBrain.storynumber==7){
     Alert(
     context: context,
     type: AlertType.error,
@@ -254,44 +322,7 @@ class _PrioritisationState extends State<Prioritisation> {
     //Choice 2 made by user.
     if(giveAlert()) {
     if (storyBrain.storynumber == 9) {
-    Alert(
-    context: context,
-    type: AlertType.error,
-    title: "Patient in Immediate danger",
-    desc: "Get CMRS the nearest hospital with ICU bed",
-    buttons: [
-    DialogButton(
-    child: Text(
-    "Call hospital",
-
-    style: TextStyle(
-    color: Colors.white, fontSize: 20),
-    ),
-    width: 120,
-    onPressed: () {
-    getLocationOfNearestHospital(2);
-    storyBrain.restart();
-    Navigator.pop(context);
-    },
-
-    ),
-    DialogButton(
-    child: Text(
-    "hospital route ",
-
-    style: TextStyle(
-    color: Colors.white, fontSize: 20),
-    ),
-    width: 120,
-    onPressed: () {
-    getLocationOfNearestHospital(1);
-    storyBrain.restart();
-    Navigator.pop(context);
-    },
-
-    )
-    ],
-    ).show();
+            getNameOfNearestHospital();
     }
     }
 
