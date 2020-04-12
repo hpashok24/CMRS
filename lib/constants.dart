@@ -175,3 +175,19 @@ const kTextFieldInputDecoration7 = InputDecoration(
     borderSide: BorderSide.none,
   ),
 );
+
+const kTextFieldInputDecoration8 = InputDecoration(
+  filled: true,
+  fillColor: Colors.white,
+
+  hintText: 'Enter patient description',
+  hintStyle: TextStyle(
+    color: Colors.black,
+  ),
+  border: OutlineInputBorder(
+    borderRadius: BorderRadius.all(
+      Radius.circular(10.0),
+    ),
+    borderSide: BorderSide.none,
+  ),
+);

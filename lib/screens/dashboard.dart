@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flash_chat/components/icon_content.dart';
+import 'package:flash_chat/screens/login_screen_hospital.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flash_chat/constants.dart';
@@ -47,6 +48,11 @@ class _HospitalDashboardState extends State<HospitalDashboard> {
     });
   }
 
+
+  _signOut() async {
+    await auth.signOut();
+  }
+
   @override
   void initState() {
     super.initState();
@@ -75,6 +81,26 @@ class _HospitalDashboardState extends State<HospitalDashboard> {
               SizedBox(
                 width: 1,
               ),
+
+              FlatButton(
+                color: Colors.teal,
+                textColor: Colors.black,
+                disabledColor: Colors.grey,
+                disabledTextColor: Colors.black,
+                padding: EdgeInsets.all(8.0),
+                splashColor: Colors.teal,
+
+                onPressed: () {
+                  _signOut();
+                  Navigator.popAndPushNamed(context, LoginScreen2.id);
+                },
+                child: Text(
+                  "Logout",
+                  style: TextStyle(
+                      decoration: TextDecoration.underline,
+                      fontSize: 10.0),
+                ),
+              )
             ],
           ),
           Expanded(

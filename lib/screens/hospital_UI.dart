@@ -198,7 +198,7 @@ class _HospitalUIState extends State<HospitalUI> {
               title: 'Logout from CMRS',
               colour: Colors.lightBlueAccent,
               onPressed: () {
-                Navigator.popAndPushNamed(context, LoginScreen2.id);
+                Navigator.pushNamed(context, LoginScreen2.id);
               },
             ),
           ],

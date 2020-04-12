@@ -1,5 +1,7 @@
+import 'package:flash_chat/screens/hospital_details.dart';
 import 'package:flash_chat/screens/inputpage.dart';
 import 'package:flash_chat/screens/login_main.dart';
+import 'package:flash_chat/screens/patients.dart';
 import 'package:flash_chat/screens/prioritizer_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flash_chat/screens/welcome_screen.dart';
@@ -9,7 +11,6 @@ import 'package:flutter/services.dart';
 import 'package:flash_chat/screens/registration_main.dart';
 import 'package:flash_chat/screens/login_screen_hospital.dart';
 import 'package:flash_chat/screens/user_options.dart';
-import 'package:flash_chat/screens/hospital_details.dart';
 import 'package:flash_chat/screens/registration_hospital.dart';
 import 'package:flash_chat/screens/dashboard.dart';
 import 'package:flash_chat/screens/hospital_UI.dart';
@@ -34,14 +35,14 @@ class FlashChat extends StatelessWidget {
         LoginScreen1.id: (context) =>             LoginScreen1(),
         WelcomeScreen.id: (context) =>          WelcomeScreen(),
         LoginScreen1.id: (context) =>             LoginScreen1(),
-        RegistrationScreen1.id: (context) =>      RegistrationScreen1(),
+        RegistrationScreen3.id: (context) =>      RegistrationScreen3(),
         Prioritisation.id: (context) =>               Prioritisation(),
         InputPage.id: (context)=>                InputPage(),
         MainLogin.id: (context)=>                MainLogin(),
         MainRegistration.id: (context)=>                MainRegistration(),
         UserOptions.id: (context)=>                UserOptions(),
         HospitalDetails.id: (context)=>                HospitalDetails(),
-        RegistrationScreen3.id: (context) =>      RegistrationScreen3(),
+        RegistrationScreen1.id: (context) =>      RegistrationScreen1(),
         HospitalDashboard.id: (context) =>             HospitalDashboard(ambulances: null,),
         HospitalUI.id: (context) =>             HospitalUI(),
       },

@@ -82,7 +82,6 @@ class _PrioritisationState extends State<Prioritisation> {
       position = await Geolocator().getLastKnownPosition(
           desiredAccuracy: LocationAccuracy.high);
       myLocation = GeoPoint(position.latitude, position.longitude);
-      print(position);
       EdgeAlert.show(context, title: 'Your location', description: '$position', gravity: EdgeAlert.BOTTOM);
 
       for (int i = 0; i < querySnapshot.documents.length; i++) {
@@ -137,7 +136,9 @@ class _PrioritisationState extends State<Prioritisation> {
     print(position);
     EdgeAlert.show(context, title: 'Your location', description: '$position', gravity: EdgeAlert.BOTTOM);
     for (int i = 0; i < querySnapshot.documents.length; i++) {
-      locations.add(querySnapshot.documents[i].data['location']);
+      if(querySnapshot.documents[i].data['ambulances']>0){
+        locations.add(querySnapshot.documents[i].data['location']);
+      }
     }
     print(locations.length);
     double min = await Geolocator().distanceBetween(myLocation.latitude, myLocation.longitude, double.parse(locations[0].split(",")[0]), double.parse(locations[0].split(",")[1]));
@@ -235,62 +236,31 @@ class _PrioritisationState extends State<Prioritisation> {
                   visible: storyBrain.buttonShouldBeVisible1(),
                      child: FlatButton(
     onPressed: () {
-    if(giveAlert())
-    {
-    if(storyBrain.storynumber==9){
-    Alert(
-    context: context,
-    type: AlertType.error,
-    title: "Patient in Immediate danger",
-    desc: "Get CMRS the nearest hospital with ICU bed",
-    buttons: [
-    DialogButton(
-    child: Text(
-    "Click here!",
+    if(giveAlert()) {
+      if (storyBrain.storynumber == 7) {
+        storyBrain.restart();
+        Alert(
+          context: context,
+          type: AlertType.error,
+          title: "Patient is not critical call a regular ambulance",
+          desc: "Call ",
+          buttons: [
+            DialogButton(
+              child: Text(
+                "Call",
 
-    style: TextStyle(color: Colors.white, fontSize: 20),
-    ),
-    width: 120,
-    onPressed: () {
-    getLocationOfNearestHospital(1);
-    storyBrain.restart();
-    Navigator.pop(context);
-    },
+                style: TextStyle(color: Colors.white, fontSize: 20),
+              ),
+              width: 120,
+              onPressed: () {
+                _launchCaller(number);
+                Navigator.pop(context);
+              },
 
-    )
-    ],
-    ).show();
-    }
-
-
-
-
-
-    }
-
-                      if(storyBrain.storynumber==7){
-    Alert(
-    context: context,
-    type: AlertType.error,
-    title: "Patient is not critical call a regular ambulance",
-    desc: "Call ",
-    buttons: [
-    DialogButton(
-    child: Text(
-    "Call",
-
-    style: TextStyle(color: Colors.white, fontSize: 20),
-    ),
-    width: 120,
-    onPressed: () {
-    _launchCaller(number);
-    storyBrain.restart();
-    Navigator.pop(context);
-    },
-
-    )
-    ],
-    ).show();
+            )
+          ],
+        ).show();
+      }
     }
 
 
@@ -323,6 +293,7 @@ class _PrioritisationState extends State<Prioritisation> {
     if(giveAlert()) {
     if (storyBrain.storynumber == 9) {
             getNameOfNearestHospital();
+            storyBrain.restart();
     }
     }
 
