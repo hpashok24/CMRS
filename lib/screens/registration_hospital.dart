@@ -1,5 +1,7 @@
+
 import 'package:flash_chat/screens/hospital_details.dart';
 import 'package:flash_chat/screens/registration_main.dart';
+import 'package:flash_chat/screens/welcome_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flash_chat/components/rounded_button.dart';
 import 'package:flash_chat/constants.dart';
@@ -9,7 +11,7 @@ import 'package:modal_progress_hud/modal_progress_hud.dart';
 
 
 class RegistrationScreen3 extends StatefulWidget {
-  static const String id = 'registration_screen';
+  static const String id = 'registration_screen_hospital';
   @override
   _RegistrationScreen3State createState() => _RegistrationScreen3State();
 }
