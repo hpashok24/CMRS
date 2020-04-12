@@ -176,7 +176,6 @@ class _PrioritisationState extends State<Prioritisation> {
           onPressed: () {
             getLocationOfNearestHospital(2);
             storyBrain.restart();
-            Navigator.pop(context);
           },
 
         ),
@@ -191,7 +190,6 @@ class _PrioritisationState extends State<Prioritisation> {
           onPressed: () {
             getLocationOfNearestHospital(1);
             storyBrain.restart();
-            Navigator.pop(context);
           },
 
         )
@@ -293,7 +291,6 @@ class _PrioritisationState extends State<Prioritisation> {
     if(giveAlert()) {
     if (storyBrain.storynumber == 9) {
             getNameOfNearestHospital();
-            storyBrain.restart();
     }
     }
 
