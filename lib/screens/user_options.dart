@@ -187,9 +187,9 @@ class _UserOptionsState extends State<UserOptions>
                     height: 60.0,
                   ),
                 ),
-                TypewriterAnimatedTextKit(
-                  text: ['C M R S'],
-                  textStyle: TextStyle(
+                Text(
+                  'C M R S',
+                  style: TextStyle(
                     fontSize: 45.0,
                     fontWeight: FontWeight.w900,
                   ),

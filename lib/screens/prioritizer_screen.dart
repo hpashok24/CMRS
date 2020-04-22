@@ -40,7 +40,7 @@ class _PrioritisationState extends State<Prioritisation> {
   getHospitalLocations(int n) async {
     return await Firestore.instance.collection('hospitals').where('beds', isGreaterThan: n).getDocuments();
   }
-  
+
   int number=108;
   int mnumber= 09844088147;
 
@@ -106,12 +106,12 @@ class _PrioritisationState extends State<Prioritisation> {
       minDistanceLocation = GeoPoint(double.parse(locations[minIndex].split(",")[0]), double.parse(locations[minIndex].split(",")[1]));
       phoneNumber = int.parse(phoneNumbers[minIndex]);
       if(n==1){
-       GoogleMaps.openMap(minDistanceLocation.latitude,minDistanceLocation.longitude);
+        GoogleMaps.openMap(minDistanceLocation.latitude,minDistanceLocation.longitude);
       }
       else if(n==2) {
         _launchCaller(phoneNumber);
-        }
       }
+    }
     on PlatformException catch(e){
       if(e.code == 'PERMISSION_DISABLED'){
         //error = 'Permission denied';
@@ -195,229 +195,227 @@ class _PrioritisationState extends State<Prioritisation> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage('images/whitebackgroung.png'),
-            fit: BoxFit.cover,
+        body: Container(
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage('images/whitebackgroung.png'),
+              fit: BoxFit.cover,
+            ),
           ),
-        ),
-        padding: EdgeInsets.symmetric(vertical: 50.0, horizontal: 15.0),
-        constraints: BoxConstraints.expand(),
-        child: SafeArea(
-          child: Column(
+          padding: EdgeInsets.symmetric(vertical: 50.0, horizontal: 15.0),
+          constraints: BoxConstraints.expand(),
+          child: SafeArea(
+              child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: <Widget>[
-              Expanded(
-                  flex: 12,
-                  child: Center(
-                    child: Text(
-                    storyBrain.getStory(),
-                    style: TextStyle(
+                  Expanded(
+                    flex: 12,
+                    child: Center(
+                      child: Text(
+                        storyBrain.getStory(),
+                        style: TextStyle(
                             fontSize: 25.0,
                             fontWeight: FontWeight.bold
-                          ),
+                        ),
+                      ),
+                    ),
                   ),
-                ),
-              ),
+                  Expanded(
+                    flex: 2,
+                    child: Visibility(
+                      visible: storyBrain.buttonShouldBeVisible1(),
+                      child: FlatButton(
+                        onPressed: () {
+                          if(giveAlert()) {
 
+                          }
+                            if (storyBrain.storynumber == 7) {
+                              storyBrain.restart();
+                              Alert(
+                                context: context,
+                                type: AlertType.error,
+                                title: "Patient is not critical call a regular ambulance",
+                                desc: "Call ",
+                                buttons: [
+                                  DialogButton(
+                                    child: Text(
+                                      "Call",
 
+                                      style: TextStyle(
+                                          color: Colors.white, fontSize: 20),
+                                    ),
+                                    width: 120,
+                                    onPressed: () {
+                                      _launchCaller(number);
+                                      storyBrain.restart();
+                                      Navigator.pop(context);
+                                    },
+                                  )
+                                ],
+                              ).show();
+                            }
 
-              Expanded(
-                flex: 2,
-                child: Visibility(
-                  visible: storyBrain.buttonShouldBeVisible1(),
-                     child: FlatButton(
-    onPressed: () {
-    if(giveAlert()) {
-      if (storyBrain.storynumber == 7) {
-        storyBrain.restart();
-        Alert(
-          context: context,
-          type: AlertType.error,
-          title: "Patient is not critical call a regular ambulance",
-          desc: "Call ",
-          buttons: [
-            DialogButton(
-              child: Text(
-                "Call",
+                          setState(() {
+                            storyBrain.nextStory(1);
+                          });
+                        },
+                        color: Colors.green,
+                        child: Text(
+                          storyBrain.getChoice1(),
+                          style: TextStyle(
+                              fontSize: 20.0,
+                              fontWeight: FontWeight.bold
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),//GREEN
+                  SizedBox(
+                    height: 20.0,
+                  ),
+                  Expanded(
+                    flex: 2,
 
-                style: TextStyle(color: Colors.white, fontSize: 20),
-              ),
-              width: 120,
-              onPressed: () {
-                _launchCaller(number);
-                Navigator.pop(context);
-              },
+                    child: Visibility(
+                      visible: storyBrain.buttonShouldBeVisible(),
+                      child: FlatButton(
+                        onPressed: () {
+                          //Choice 2 made by user.
+                          if(giveAlert()) {
+                            if (storyBrain.storynumber == 9) {
+                              getNameOfNearestHospital();
+                            }
+                          }
 
-            )
-          ],
-        ).show();
-      }
-    }
+                          setState(() {
+                            storyBrain.nextStory(2);
+                          });
+                        },
+                        color: Colors.redAccent,
+                        child: Text(
 
+                          storyBrain.getChoice2(),
+                          style: TextStyle(
+                            fontSize: 20.0,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),//RED
+                  SizedBox(
+                    height: 10.0,
+                  ),
+                  Expanded(
+                    flex: 2,
+                    child: Visibility(
+                      visible: storyBrain.buttonShouldBeVisible2(),
+                      child: FlatButton(
+                        onPressed: () {
+                          //Choice 2 made by user.
+                          if(giveAlert()) {
+                            if (storyBrain.storynumber == 10) {
+                              Alert(
+                                context: context,
+                                type: AlertType.error,
+                                title: "Patient is not critical",
+                                desc: "call normal ambulance",
+                                buttons: [
+                                  DialogButton(
+                                    child: Text(
+                                      "Call hospital",
 
-    setState(() {
-    storyBrain.nextStory(1);
-    });
-    },
-    color: Colors.green,
-    child: Text(
-    storyBrain.getChoice1(),
-    style: TextStyle(
-    fontSize: 20.0,
-    fontWeight: FontWeight.bold
-    ),
-    ),
-    ),
-    ),
-    ),//GREEN
-    SizedBox(
-    height: 20.0,
-    ),
-    Expanded(
-    flex: 2,
+                                      style: TextStyle(
+                                          color: Colors.white, fontSize: 20),
+                                    ),
+                                    width: 120,
+                                    onPressed: () {
+                                      _launchCaller(number);
+                                      storyBrain.restart();
+                                      Navigator.pop(context);
+                                    },
 
-    child: Visibility(
-    visible: storyBrain.buttonShouldBeVisible(),
-    child: FlatButton(
-    onPressed: () {
-    //Choice 2 made by user.
-    if(giveAlert()) {
-    if (storyBrain.storynumber == 9) {
-            getNameOfNearestHospital();
-    }
-    }
+                                  ),
 
-    setState(() {
-    storyBrain.nextStory(2);
-    });
-    },
-    color: Colors.redAccent,
-    child: Text(
+                                ],
+                              ).show();
+                            }
+                          }
 
-    storyBrain.getChoice2(),
-    style: TextStyle(
-    fontSize: 20.0,
-    fontWeight: FontWeight.bold,
-    ),
-    ),
-    ),
-    ),
-    ),//RED
-    SizedBox(
-    height: 10.0,
-    ),
-    Expanded(
-    flex: 2,
-    child: Visibility(
-    visible: storyBrain.buttonShouldBeVisible2(),
-    child: FlatButton(
-    onPressed: () {
-    //Choice 2 made by user.
-    if(giveAlert()) {
-    if (storyBrain.storynumber == 10) {
-    Alert(
-    context: context,
-    type: AlertType.error,
-    title: "Patient is not critical",
-    desc: "call normal ambulance",
-    buttons: [
-    DialogButton(
-    child: Text(
-    "Call hospital",
+                          setState(() {
+                            storyBrain.nextStory(2);
+                          });
+                        },
+                        color: Colors.yellowAccent,
+                        child: Text(
 
-    style: TextStyle(
-    color: Colors.white, fontSize: 20),
-    ),
-    width: 120,
-    onPressed: () {
-    _launchCaller(number);
-    storyBrain.restart();
-    Navigator.pop(context);
-    },
+                          "What to do now?",
+                          style: TextStyle(
+                            fontSize: 20.0,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),//YELLOW
+                  SizedBox(
+                    height: 10.0,
+                  ),
+                  Expanded(
+                    flex: 2,
 
-    ),
+                    child: Visibility(
+                      visible: storyBrain.buttonShouldBeVisible3(),
+                      child: FlatButton(
+                        onPressed: () {
+                          //Choice 2 made by user.
+                          if(giveAlert()) {
+                            if(storyBrain.storynumber==8){
+                              Alert(
+                                context: context,
+                                type: AlertType.error,
+                                title: "Mortuary Van",
+                                desc: "Call St Peters Undertaker service",
+                                buttons: [
+                                  DialogButton(
+                                    child: Text(
+                                      "Call",
 
-    ],
-    ).show();
-    }
-    }
+                                      style: TextStyle(color: Colors.white, fontSize: 20),
+                                    ),
+                                    width: 120,
+                                    onPressed: () {
+                                      _launchCaller(mnumber);
+                                      storyBrain.restart();
+                                      Navigator.pop(context);
+                                    },
 
-    setState(() {
-    storyBrain.nextStory(2);
-    });
-    },
-    color: Colors.yellowAccent,
-    child: Text(
+                                  )
+                                ],
+                              ).show();
+                            }
+                          }
 
-    "What to do now?",
-    style: TextStyle(
-    fontSize: 20.0,
-    fontWeight: FontWeight.bold,
-    ),
-    ),
-    ),
-    ),
-    ),//YELLOW
-    SizedBox(
-    height: 10.0,
-    ),
-    Expanded(
-    flex: 2,
+                          setState(() {
+                            storyBrain.nextStory(2);
+                          });
+                        },
+                        color: Colors.grey,
+                        child: Text(
 
-    child: Visibility(
-    visible: storyBrain.buttonShouldBeVisible3(),
-    child: FlatButton(
-    onPressed: () {
-    //Choice 2 made by user.
-    if(giveAlert()) {
-    if(storyBrain.storynumber==8){
-    Alert(
-    context: context,
-    type: AlertType.error,
-    title: "Mortuary Van",
-    desc: "Call St Peters Undertaker service",
-    buttons: [
-    DialogButton(
-    child: Text(
-    "Call",
-
-    style: TextStyle(color: Colors.white, fontSize: 20),
-    ),
-    width: 120,
-    onPressed: () {
-    _launchCaller(mnumber);
-    storyBrain.restart();
-    Navigator.pop(context);
-    },
-
-    )
-    ],
-    ).show();
-    }
-    }
-
-    setState(() {
-    storyBrain.nextStory(2);
-    });
-    },
-    color: Colors.grey,
-    child: Text(
-
-    "What to do now?",
-    style: TextStyle(
-    fontSize: 20.0,
-    fontWeight: FontWeight.bold,
-    ),
-    ),
-    ),
-    ),
-    ),// GREY
-    ],
-    )
-      ),
-    ));
+                          "What to do now?",
+                          style: TextStyle(
+                            fontSize: 20.0,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),// GREY
+                ],
+              )
+          ),
+        ));
   }
 }
 
