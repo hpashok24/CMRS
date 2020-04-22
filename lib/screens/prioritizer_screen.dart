@@ -90,7 +90,6 @@ class _PrioritisationState extends State<Prioritisation> {
           phoneNumbers.add(querySnapshot.documents[i].data['phone number']);
         }
       }
-      print(locations.length);
       double min = await Geolocator().distanceBetween(myLocation.latitude, myLocation.longitude, double.parse(locations[0].split(",")[0]), double.parse(locations[0].split(",")[1]));
       int minIndex = 0;
       for (int i = 1; i < locations.length; i++) {
@@ -104,12 +103,8 @@ class _PrioritisationState extends State<Prioritisation> {
           minIndex = i;
         }
       }
-      print(minIndex);
       minDistanceLocation = GeoPoint(double.parse(locations[minIndex].split(",")[0]), double.parse(locations[minIndex].split(",")[1]));
-      print(minDistanceLocation.latitude);
-      print(minDistanceLocation.longitude);
       phoneNumber = int.parse(phoneNumbers[minIndex]);
-      print(phoneNumber);
       if(n==1){
        GoogleMaps.openMap(minDistanceLocation.latitude,minDistanceLocation.longitude);
       }
